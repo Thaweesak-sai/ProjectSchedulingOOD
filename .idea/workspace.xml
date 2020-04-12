@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c876ee1-80e7-4271-b145-f351327692ca" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Project.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ProjectManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TextFileIO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Project.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ProjectManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ProjectManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +37,12 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -71,7 +78,7 @@
       <updated>1586342072715</updated>
       <workItem from="1586688682595" duration="807000" />
       <workItem from="1586690222165" duration="177000" />
-      <workItem from="1586690566584" duration="1525000" />
+      <workItem from="1586690566584" duration="9476000" />
     </task>
     <servers />
   </component>

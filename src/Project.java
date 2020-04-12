@@ -44,10 +44,10 @@ public class Project {
     public void assignDate(){
 
     }
-    public void calculateSchedule(){
-        int a =0;
-        int b= 1;
-        int c = a+b;
+    public void calculateSchedule() {
+        int a = 0;
+        int b = 1;
+        int c = a + b;
         System.out.println(c);
     }
 
