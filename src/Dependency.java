@@ -34,4 +34,16 @@ public class Dependency {
         return true;
     }
 
+    public void printAllSuccessorTask(){
+        for(Task task : successorTask){
+            System.out.println(task.getTaskName());
+        }
+    }
+
+    public void printAllPredecessorTask(){
+        for(Task task : preDecessorTask){
+            System.out.println(task.getTaskName());
+        }
+    }
+
 }

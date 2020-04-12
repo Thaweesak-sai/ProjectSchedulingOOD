@@ -34,7 +34,7 @@ public class TaskManager {
 
     public void showAllTask(){
         for(Task task : taskList){
-                task.showTaskInformation();
+                System.out.println(task.getTaskName());
             }
         }
 }

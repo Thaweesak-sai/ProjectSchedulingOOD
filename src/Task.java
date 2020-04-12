@@ -12,6 +12,7 @@ public class Task {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
         this.duration = duration;
+        this.dependency = new Dependency();
     }
 
     public String getTaskName() {
@@ -69,6 +70,7 @@ public class Task {
 //        System.out.println("Start Date: " + this.startDate.toString());
 //        System.out.println("End Date: " + this.endDate.toString());
     }
+
 
 
 }
