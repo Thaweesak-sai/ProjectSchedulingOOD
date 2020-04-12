@@ -25,15 +25,19 @@ public class ProjectSchedulingApplication {
         task.getDependency().addSuccessorTask(selectedTask);
     }
 
-    private static boolean findTask(){
+    private static void removeDependency(Task task) {
+        selectedTask.getDependency().removePreDecessorTask(task);
+        task.getDependency().removeSuccessorTask(selectedTask);
+    }
+
+    private static Task findTask(){
         String inputTask = scanner.nextLine();
-        Task result = taskManager.getTask(inputTask);
-        if(result != null){
-            addDependency(result);
-            return true;
-        } else {
-            return false;
-        }
+        return taskManager.getTask(inputTask);
+    }
+
+    private static Task findTaskExcept(){
+        String inputTask = scanner.nextLine();
+        return taskManager.getTaskExcept(inputTask,selectedTask);
     }
 
     private static boolean createNewProject(){
@@ -77,13 +81,12 @@ public class ProjectSchedulingApplication {
     }
 
     private static void taskPage(){
-        System.out.println("Task: " + selectedTask.getTaskName());
-        System.out.println("Description: " + selectedTask.getTaskDescription());
-        System.out.println("Duration: " + selectedTask.getDuration());
+        selectedTask.showTaskInformation();
         System.out.println("1. Edit Task Information");
         System.out.println("2. Add Dependency");
         System.out.println("3. Remove Dependency");
-        System.out.println("4. Back");
+        System.out.println("4. Remove Task");
+        System.out.println("5. Back");
         System.out.print("Enter: ");
         int choice = scanner.nextInt();
         scanner.nextLine();
@@ -92,13 +95,24 @@ public class ProjectSchedulingApplication {
                 editTaskPage();
                 break;
             case 2:
-                taskManager.showAllTask();
-                findTask();
+                taskManager.showAllTaskExcept(selectedTask);
+                Task dependencyTask = findTaskExcept();
+                addDependency(dependencyTask);
+                taskPage();
                 break;
             case 3:
+                selectedTask.getDependency().printAllPredecessorTask();
+                Task removeDependencyTask = findTaskExcept();
+                removeDependency(removeDependencyTask);
+                taskPage();
                 break;
             case 4:
+                taskManager.deleteTask(selectedTask);
+                selectedTask = null;
                 projectPage();
+            case 5:
+                projectPage();
+                break;
         }
     }
 
@@ -113,12 +127,25 @@ public class ProjectSchedulingApplication {
         int choice = scanner.nextInt();
         scanner.nextLine();
         switch (choice){
+            case 1:
+                break;
             case 2:
                 selectedTask = addNewTask();
                 taskPage();
                 break;
             case 3:
                 taskManager.showAllTask();
+                selectedTask = findTask();
+                if(selectedTask != null){
+                   taskPage();
+                }
+                else {
+                    System.out.println("Can't find the task that you enter");
+                }
+                break;
+            case 4:
+                break;
+            case 5:
                 break;
         }
     }

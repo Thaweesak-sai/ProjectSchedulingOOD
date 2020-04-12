@@ -22,19 +22,39 @@ public class TaskManager {
         return null;
     }
 
-    public boolean deleteTask(String taskName){
+    public Task getTaskExcept(String taskName,Task selectedTask){
         for(Task task : taskList){
-            if(task.getTaskName().equals(taskName)){
-                taskList.remove(task);
-                return true;
+            if(task.getTaskName().equals(taskName) && !task.equals(selectedTask)){
+                return task;
             }
         }
-        return false;
+        return null;
+    }
+
+    public boolean deleteTask(Task deletedTask){
+        List<Task> preDecessorList = deletedTask.getDependency().getPreDecessorTask();
+        List<Task> successorList = deletedTask.getDependency().getSuccessorTask();
+        for(Task task : preDecessorList){
+            task.getDependency().getSuccessorTask().remove(deletedTask);
+        }
+        for(Task task : successorList){
+            task.getDependency().getPreDecessorTask().remove(deletedTask);
+        }
+        return taskList.remove(deletedTask);
     }
 
     public void showAllTask(){
+        System.out.println("All the tasks in this project");
         for(Task task : taskList){
-                System.out.println(task.getTaskName());
+                System.out.println("Task: " + task.getTaskName());
+            }
+    }
+
+    public void showAllTaskExcept(Task selectedTask){
+        for (Task task : taskList){
+            if(!task.equals(selectedTask)){
+                System.out.println("Task: " + task.getTaskName());
             }
         }
+    }
 }

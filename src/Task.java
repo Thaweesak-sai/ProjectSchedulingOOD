@@ -67,10 +67,32 @@ public class Task {
         System.out.println("Task Name: " + this.taskName);
         System.out.println("Description: " + this.taskDescription);
         System.out.println("Duration: " + this.duration);
-//        System.out.println("Start Date: " + this.startDate.toString());
-//        System.out.println("End Date: " + this.endDate.toString());
+        if(startDate != null){
+            System.out.println("Start Date: " + this.startDate.toString());
+        }
+        else {
+            System.out.println("Start Date: -");
+        }
+        if(endDate != null){
+            System.out.println("End Date: " + this.endDate.toString());
+        }
+        else {
+            System.out.println("End Date: -");
+        }
+        this.dependency.printAllPredecessorTask();
+        this.dependency.printAllSuccessorTask();
+
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskName='" + taskName + '\'' +
+                ", taskDescription='" + taskDescription + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", duration=" + duration +
+                ", dependency=" + dependency +
+                '}';
+    }
 }
