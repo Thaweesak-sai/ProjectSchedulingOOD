@@ -1,8 +1,12 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class ProjectSchedulingApplication {
     private static Scanner scanner = new Scanner(System.in);
     private static TaskManager taskManager = new TaskManager();
+    private static ProjectManager projectManager = new ProjectManager();
 
 
     private static boolean addNewTask(){
@@ -17,11 +21,22 @@ public class ProjectSchedulingApplication {
         return taskManager.addTask(task);
     }
 
-    private static boolean createNewProject(){
-        return true;
+    private static boolean createNewProject() throws ParseException {
+        System.out.print("Project Name: ");
+        String projectName = scanner.nextLine();
+        System.out.print("Project description: ");
+        String projectDesc = scanner.nextLine();
+        System.out.print("Start date: ");
+        String dateInString = scanner.nextLine();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = formatter.parse(dateInString);
+        Project newProject = new Project(projectName,projectDesc,date);
+        return projectManager.addProject(newProject);
     }
 
     private static boolean loadProject(){
+        projectManager.loadProject();
+        projectPage();
         return true;
     }
 
@@ -58,7 +73,11 @@ public class ProjectSchedulingApplication {
         switch (choice){
             case 1:
                 System.out.println(" Create New Project");
-                createNewProject();
+                try {
+                    createNewProject();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
             case 2:
                 System.out.println("Load Project");

@@ -22,7 +22,7 @@ public class ProjectManager {
 
     }
     public void printAllProject() throws IOException {
-        textFileIO.getAllFileName();
+        System.out.println(textFileIO.getAllFileName());
     }
     public Boolean deleteProject(Project project) throws IOException {
         return textFileIO.deleteProjectFile(project);

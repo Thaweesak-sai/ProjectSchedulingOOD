@@ -10,6 +10,9 @@ public class Project {
     public Project(String projectName, String projectDesc, Date startDate)
     {
         System.out.println(projectName +"is successfully created");
+        this.projectName = projectName;
+        this.projectDesc = projectDesc;
+        this.startDate = startDate;
     }
     public String getName(){
         return this.projectName;
