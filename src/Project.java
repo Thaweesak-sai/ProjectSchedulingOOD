@@ -42,10 +42,15 @@ public class Project {
         System.out.println("Wait for motivation");
     }
     public Boolean save(){
+        
         return true;
     }
     public void assignDate(){
-
+    }
+    public void showProjectInformation(){
+        System.out.println("Project name: "+projectName);
+        System.out.println("Project description: "+projectDesc);
+        System.out.println("Start date: "+startDate);
     }
     public void calculateSchedule() {
         int a = 0;

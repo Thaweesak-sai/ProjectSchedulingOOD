@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,14 +35,18 @@ public class ProjectSchedulingApplication {
         return projectManager.addProject(newProject);
     }
 
-    private static boolean loadProject(){
-        projectManager.loadProject();
-        projectPage();
+    private static boolean loadProject() throws IOException {
+        projectManager.printAllProject();
+        System.out.print("Project name to load:");
+        String projectName = scanner.next();
+        Project project = projectManager.getProject(projectName);  /* Load ไฟล์โปรเจคยังไม่มาแล้วจะเอาอะไรมาให้.... */
+        project.showProjectInformation();
+        projectPage(project);
         return true;
     }
 
-    private static void projectPage(){
-        System.out.println("Project: ");
+    private static void projectPage(Project project){
+        System.out.println("Project: "+project.getName());
         System.out.println("1. Edit Project Information");
         System.out.println("2. Add New Task");
         System.out.println("3. Select Task");
@@ -51,18 +56,27 @@ public class ProjectSchedulingApplication {
         int choice = scanner.nextInt();
         scanner.nextLine();
         switch (choice){
+            case 1:
+
+                break;
             case 2:
                 addNewTask();
                 break;
             case 3:
                 taskManager.showAllTask();
                 break;
+            case 4:
+                project.scheduleReport();
+                break;
+            case 5:
+                try {
+                    projectManager.save(project);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
     }
-
-
-
-
     public static void main(String[] args) {
         System.out.println("Welcome to Project Scheduling Application");
         System.out.println("1. Create New Project");
@@ -81,7 +95,11 @@ public class ProjectSchedulingApplication {
                 break;
             case 2:
                 System.out.println("Load Project");
-                loadProject();
+                try {
+                    loadProject();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }

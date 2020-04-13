@@ -19,7 +19,7 @@ public class ProjectManager {
         return true;
     }
     public void loadProject(){
-
+        
     }
     public void printAllProject() throws IOException {
         System.out.println(textFileIO.getAllFileName());
@@ -36,5 +36,9 @@ public class ProjectManager {
             }
         }
         return null;
+    }
+    public Boolean save(Project project) throws IOException {
+        textFileIO.writeProjectFile(project);
+        return true;
     }
 }
