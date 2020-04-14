@@ -27,7 +27,7 @@ public class ProjectSchedulingApplication {
         String projectName = scanner.nextLine();
         System.out.print("Project description: ");
         String projectDesc = scanner.nextLine();
-        System.out.print("Start date: ");
+        System.out.print("Start date (DD-MM-YYYY): ");
         String dateInString = scanner.nextLine();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date date = formatter.parse(dateInString);
@@ -79,28 +79,38 @@ public class ProjectSchedulingApplication {
     }
     public static void main(String[] args) {
         System.out.println("Welcome to Project Scheduling Application");
-        System.out.println("1. Create New Project");
-        System.out.println("2. Load Project");
-        System.out.print("Enter: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        switch (choice){
-            case 1:
-                System.out.println(" Create New Project");
-                try {
-                    createNewProject();
-                } catch (ParseException e) {
-                    e.printStackTrace();
+        int choice = -1;
+        do{
+                System.out.println("1. Create New Project");
+                System.out.println("2. Load Project");
+                System.out.println("3. Exit Program");
+                System.out.print("Enter: ");
+                choice = scanner.nextInt();
+                scanner.nextLine();
+
+                switch (choice) {
+                    case 1:
+                        System.out.println(" Create New Project");
+                        try {
+                            createNewProject();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 2:
+                        System.out.println("Load Project");
+                        try {
+                            loadProject();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 3:
+                        System.out.println("Exiting Program...");
+                        break;
+                    default:
+                        System.out.println("Invalid menu choice. Please try again...");
                 }
-                break;
-            case 2:
-                System.out.println("Load Project");
-                try {
-                    loadProject();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
-        }
+        }while(choice!=3);
     }
 }

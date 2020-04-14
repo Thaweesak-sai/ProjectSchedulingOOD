@@ -2,20 +2,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ProjectManager {
-    private ArrayList<Project> projectList;
+    private ArrayList<Project> projectList = new ArrayList<>();
     TextFileIO textFileIO = new TextFileIO();
     public ProjectManager(){
 
     }
     public Boolean addProject(Project project){
-        try {
-            projectList.add(project);
-        }
-        catch (Exception e)
-        {
-            System.out.println("ERROR : Fail to add project to a list");
-            return false;
-        }
+            if(!projectList.add(project))
+            {
+                System.out.println("ERROR : Fail to add project to a list");
+                return false;
+            }
         return true;
     }
     public void loadProject(){
