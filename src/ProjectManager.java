@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ProjectManager {
-    private ArrayList<Project> projectList = new ArrayList<>();
+    private static ArrayList<Project> projectList = new ArrayList<>();
     TextFileIO textFileIO = new TextFileIO();
     public ProjectManager(){
 
@@ -15,7 +15,14 @@ public class ProjectManager {
             }
         return true;
     }
-    public void loadProject(){
+    public void loadAllProject(){
+        String allFileNames = textFileIO.getAllFileName();
+        String [] buffer = allFileNames.split(".");
+        for(int i=0;i<buffer.length;i++)
+        {
+            Project project =
+        }
+
         
     }
     public void printAllProject() throws IOException {

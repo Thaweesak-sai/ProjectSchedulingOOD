@@ -36,6 +36,7 @@ public class ProjectSchedulingApplication {
     }
 
     private static boolean loadProject() throws IOException {
+        projectManager.loadAllProject();
         projectManager.printAllProject();
         System.out.print("Project name to load:");
         String projectName = scanner.next();
@@ -46,36 +47,42 @@ public class ProjectSchedulingApplication {
     }
 
     private static void projectPage(Project project){
-        System.out.println("Project: "+project.getName());
-        System.out.println("1. Edit Project Information");
-        System.out.println("2. Add New Task");
-        System.out.println("3. Select Task");
-        System.out.println("4. Print Schedule Report");
-        System.out.println("5. Save & Exit");
-        System.out.print("Enter: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        switch (choice){
-            case 1:
+        int choice;
+        do {
+            System.out.println("Project: " + project.getName());
+            System.out.println("1. Edit Project Information");
+            System.out.println("2. Add New Task");
+            System.out.println("3. Select Task");
+            System.out.println("4. Print Schedule Report");
+            System.out.println("5. Save & Exit");
+            System.out.print("Enter: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+            switch (choice) {
+                case 1:
+                    project.showProjectInformation();
 
-                break;
-            case 2:
-                addNewTask();
-                break;
-            case 3:
-                taskManager.showAllTask();
-                break;
-            case 4:
-                project.scheduleReport();
-                break;
-            case 5:
-                try {
-                    projectManager.save(project);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
-        }
+
+                    break;
+                case 2:
+                    addNewTask();
+                    break;
+                case 3:
+                    taskManager.showAllTask();
+                    break;
+                case 4:
+                    project.scheduleReport();
+                    break;
+                case 5:
+                    try {
+                        projectManager.save(project);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("Exiting Project '"+project.getName()+"'...");
+                    break;
+            }
+        }while(choice!=5);
     }
     public static void main(String[] args) {
         System.out.println("Welcome to Project Scheduling Application");

@@ -86,8 +86,9 @@ public class TextFileIO {
         return true;
     }
 
-    public String getAllFileName() throws IOException {
+    public String getAllFileName() {
         Path currentPath = FileSystems.getDefault().getPath("").toAbsolutePath();
+        System.out.println("Searching all files..." + currentPath);
         File folder = new File(String.valueOf(currentPath));
         File[] projectFileList = folder.listFiles((file, name) -> name.endsWith(".txt"));
         StringBuilder filesName = null;
@@ -97,6 +98,7 @@ public class TextFileIO {
         }
        for (File file :projectFileList){
            filesName.append(file.getName());
+           filesName.append(".");
        }
        return filesName.toString();
     }
