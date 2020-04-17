@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class ProjectSchedulingApplication {
     private static Scanner scanner = new Scanner(System.in);
-    private static TaskManager taskManager = new TaskManager();
+    private static TaskManager selectedTaskManager;
     private static ProjectManager projectManager = new ProjectManager();
     private static Project selectedProject;
     private static Task selectedTask;
@@ -22,28 +22,26 @@ public class ProjectSchedulingApplication {
         scanner.nextLine();
         Task task = new Task(taskName,taskDescription,duration);
         task.showTaskInformation();
-        taskManager.addTask(task);
+        selectedTaskManager.addTask(task);
         return task;
     }
 
     private static void addDependency(Task task) {
-        selectedTask.getDependency().addPreDecessorTask(task);
-        task.getDependency().addSuccessorTask(selectedTask);
+        selectedTask.addDependency(selectedTask,task);
     }
 
     private static void removeDependency(Task task) {
-        selectedTask.getDependency().removePreDecessorTask(task);
-        task.getDependency().removeSuccessorTask(selectedTask);
+        selectedTask.removeDependency(task);
     }
 
     private static Task findTask(){
         String inputTask = scanner.nextLine();
-        return taskManager.getTask(inputTask);
+        return selectedTaskManager.getTask(inputTask);
     }
 
     private static Task findTaskExcept(){
         String inputTask = scanner.nextLine();
-        return taskManager.getTaskExcept(inputTask,selectedTask);
+        return selectedTaskManager.getTaskExcept(inputTask,selectedTask);
     }
 
     private static Project createNewProject() throws ParseException {
@@ -89,7 +87,7 @@ public class ProjectSchedulingApplication {
                 taskPage();
                 break;
             case 3:
-                taskManager.showAllTask();
+                selectedTaskManager.showAllTask();
                 selectedTask = findTask();
                 if(selectedTask != null){
                    taskPage();
@@ -158,19 +156,31 @@ public class ProjectSchedulingApplication {
                 editTaskPage();
                 break;
             case 2:
-                taskManager.showAllTaskExcept(selectedTask);
-                Task dependencyTask = findTaskExcept();
-                addDependency(dependencyTask);
+                if(selectedTaskManager.showAllTaskExcept(selectedTask)){
+                    Task dependencyTask = findTaskExcept();
+                    if(dependencyTask != null){
+                        addDependency(dependencyTask);
+                    }else {
+                        System.out.println("There is no task");
+                    }
+                } else {
+                    System.out.println("There is no other task");
+                }
                 taskPage();
                 break;
             case 3:
-                selectedTask.getDependency().printAllPredecessorTask();
+                selectedTask.showAllDependency();
                 Task removeDependencyTask = findTaskExcept();
-                removeDependency(removeDependencyTask);
+                if(removeDependencyTask != null){
+                    removeDependency(removeDependencyTask);
+                }else {
+                    System.out.println("There is no task");
+                }
                 taskPage();
+
                 break;
             case 4:
-                taskManager.deleteTask(selectedTask);
+                selectedTaskManager.deleteTask(selectedTask);
                 selectedTask = null;
                 projectPage();
             case 5:
@@ -195,6 +205,7 @@ public class ProjectSchedulingApplication {
                         System.out.println(" Create New Project");
                         try {
                             selectedProject = createNewProject();
+                            selectedTaskManager = selectedProject.getTaskList();
                             projectPage();
                         } catch (ParseException e) {
                             e.printStackTrace();

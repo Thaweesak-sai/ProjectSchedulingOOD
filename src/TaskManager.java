@@ -15,7 +15,7 @@ public class TaskManager {
 
     public Task getTask(String taskName){
         for(Task task : taskList){
-            if(task.getTaskName().equals(taskName)){
+            if(task.getTaskName().equals(taskName) && !(task instanceof  Milestone)){
                 return task;
             }
         }
@@ -24,7 +24,7 @@ public class TaskManager {
 
     public Task getTaskExcept(String taskName,Task selectedTask){
         for(Task task : taskList){
-            if(task.getTaskName().equals(taskName) && !task.equals(selectedTask)){
+            if(task.getTaskName().equals(taskName) && !task.equals(selectedTask) && !(task instanceof  Milestone)){
                 return task;
             }
         }
@@ -32,29 +32,41 @@ public class TaskManager {
     }
 
     public boolean deleteTask(Task deletedTask){
-        List<Task> preDecessorList = deletedTask.getDependency().getPreDecessorTask();
-        List<Task> successorList = deletedTask.getDependency().getSuccessorTask();
-        for(Task task : preDecessorList){
-            task.getDependency().getSuccessorTask().remove(deletedTask);
-        }
-        for(Task task : successorList){
-            task.getDependency().getPreDecessorTask().remove(deletedTask);
-        }
         return taskList.remove(deletedTask);
     }
 
     public void showAllTask(){
         System.out.println("All the tasks in this project");
         for(Task task : taskList){
+            if(!(task instanceof  Milestone))
                 System.out.println("Task: " + task.getTaskName());
             }
     }
 
-    public void showAllTaskExcept(Task selectedTask){
-        for (Task task : taskList){
-            if(!task.equals(selectedTask)){
-                System.out.println("Task: " + task.getTaskName());
+    public boolean showAllTaskExcept(Task selectedTask){
+        List<Task> availableTask = new ArrayList<Task>(taskList);
+        availableTask.remove(selectedTask);
+        for(Task task : availableTask){
+            if(task instanceof Milestone){
+                availableTask.remove(task);
             }
         }
+        for(Dependency dependency : selectedTask.getDependencyList()){
+            if(availableTask.contains(dependency.getSuccessorTask())){
+                availableTask.remove(dependency.getSuccessorTask());
+            }
+        }
+        if(taskList.size() > 2){
+            System.out.println("Available tasks in this project");
+            for (Task task : taskList){
+                if(!task.equals(selectedTask) && !(task instanceof  Milestone)){
+                    System.out.println("Task: " + task.getTaskName());
+                }
+            }
+            return true;
+        }else {
+            return false;
+        }
+
     }
 }

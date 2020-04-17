@@ -13,7 +13,15 @@ public class Project {
         this.projectName = projectName;
         this.projectDesc = projectDesc;
         this.startDate = startDate;
+        this.taskList = new TaskManager();
+        taskList.addTask(new Milestone("Start","Starting Task"));
+        taskList.addTask(new Milestone("End","Ending Task"));
     }
+
+    public TaskManager getTaskList() {
+        return taskList;
+    }
+
     public String getName(){
         return this.projectName;
     }

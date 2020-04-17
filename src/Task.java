@@ -1,18 +1,19 @@
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Task {
-    private String taskName;
+    protected String taskName;
     private String taskDescription;
     private Date startDate;
     private Date endDate;
     private int duration;
-    private Dependency dependency;
+    private ArrayList<Dependency> dependencyList;
 
     public Task(String taskName, String taskDescription,int duration) {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
         this.duration = duration;
-        this.dependency = new Dependency();
+        this.dependencyList = new ArrayList<Dependency>();
     }
 
     public String getTaskName() {
@@ -55,13 +56,20 @@ public class Task {
         this.duration = duration;
     }
 
-    public Dependency getDependency() {
-        return dependency;
+    public ArrayList<Dependency> getDependencyList() {
+        return dependencyList;
     }
 
-    public void setDependency(Dependency dependency) {
-        this.dependency = dependency;
+    public boolean addDependency(Task preDecessorTask, Task successorTask){
+        dependencyList.add(new Dependency(preDecessorTask,successorTask));
+        return true;
     }
+
+    public boolean removeDependency(Task successorTask){
+        dependencyList.remove(successorTask);
+        return true;
+    }
+
 
     public void showTaskInformation(){
         System.out.println("Task Name: " + this.taskName);
@@ -79,9 +87,20 @@ public class Task {
         else {
             System.out.println("End Date: -");
         }
-        this.dependency.printAllPredecessorTask();
-        this.dependency.printAllSuccessorTask();
+        if(dependencyList.size() == 0){
+            System.out.println("Dependency: -");
+        }
+        else {
+            showAllDependency();
+        }
 
+    }
+
+    public void showAllDependency(){
+        System.out.println("Dependency ");
+        for(Dependency dependency : dependencyList){
+            System.out.println("Task: " + dependency.getSuccessorTask().taskName);
+        }
     }
 
     @Override
@@ -92,7 +111,7 @@ public class Task {
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", duration=" + duration +
-                ", dependency=" + dependency +
+                ", dependencyList=" + dependencyList +
                 '}';
     }
 }
