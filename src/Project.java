@@ -1,7 +1,7 @@
 import java.util.Date;
 
 public class Project {
-    private TaskManager taskList;
+    private TaskManager taskManager;
     private Date startDate;
     private Date endDate;
     private String projectName;
@@ -13,13 +13,11 @@ public class Project {
         this.projectName = projectName;
         this.projectDesc = projectDesc;
         this.startDate = startDate;
-        this.taskList = new TaskManager();
-        taskList.addTask(new Milestone("Start","Starting Task"));
-        taskList.addTask(new Milestone("End","Ending Task"));
+        this.taskManager = new TaskManager();
     }
 
-    public TaskManager getTaskList() {
-        return taskList;
+    public TaskManager getTaskManager() {
+        return taskManager;
     }
 
     public String getName(){
@@ -53,18 +51,15 @@ public class Project {
         
         return true;
     }
-    public void assignDate(){
-    }
+
+
     public void showProjectInformation(){
         System.out.println("Project name: "+projectName);
         System.out.println("Project description: "+projectDesc);
         System.out.println("Start date: "+startDate);
     }
     public void calculateSchedule() {
-        int a = 0;
-        int b = 1;
-        int c = a + b;
-        System.out.println(c);
+
     }
 
 }

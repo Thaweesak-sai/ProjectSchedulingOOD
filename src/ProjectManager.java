@@ -20,7 +20,6 @@ public class ProjectManager {
         String [] buffer = allFileNames.split(".");
         for(int i=0;i<buffer.length;i++)
         {
-            Project project =
         }
 
         

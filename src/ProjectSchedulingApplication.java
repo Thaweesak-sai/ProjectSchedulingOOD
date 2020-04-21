@@ -10,6 +10,8 @@ public class ProjectSchedulingApplication {
     private static ProjectManager projectManager = new ProjectManager();
     private static Project selectedProject;
     private static Task selectedTask;
+    private static String pattern = "dd-MM-yyyy";
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
 
     private static Task addNewTask(){
@@ -21,14 +23,14 @@ public class ProjectSchedulingApplication {
         int duration = scanner.nextInt();
         scanner.nextLine();
         Task task = new Task(taskName,taskDescription,duration);
-        task.showTaskInformation();
         selectedTaskManager.addTask(task);
         return task;
     }
 
-    private static void addDependency(Task task) {
-        selectedTask.addDependency(selectedTask,task);
+    private static void addDependency(Task preDecessorTask, Task successorTask){
+        selectedTaskManager.addDependency(preDecessorTask,successorTask);
     }
+
 
     private static void removeDependency(Task task) {
         selectedTask.removeDependency(task);
@@ -39,10 +41,6 @@ public class ProjectSchedulingApplication {
         return selectedTaskManager.getTask(inputTask);
     }
 
-    private static Task findTaskExcept(){
-        String inputTask = scanner.nextLine();
-        return selectedTaskManager.getTaskExcept(inputTask,selectedTask);
-    }
 
     private static Project createNewProject() throws ParseException {
         System.out.print("Project Name: ");
@@ -73,9 +71,12 @@ public class ProjectSchedulingApplication {
         System.out.println("Project: "+ selectedProject.getName());
         System.out.println("1. Edit Project Information");
         System.out.println("2. Add New Task");
-        System.out.println("3. Select Task");
-        System.out.println("4. Print Schedule Report");
-        System.out.println("5. Save & Exit");
+        System.out.println("3. Edit Task Information");
+        System.out.println("4. Remove Task");
+        System.out.println("5. Add Task Dependency");
+        System.out.println("6. Remove Task Dependency");
+        System.out.println("7. Print Schedule Report");
+        System.out.println("8. Save & Exit");
         System.out.print("Enter: ");
         int choice = scanner.nextInt();
         scanner.nextLine();
@@ -84,28 +85,87 @@ public class ProjectSchedulingApplication {
                 break;
             case 2:
                 selectedTask = addNewTask();
-                taskPage();
+                projectPage();
                 break;
             case 3:
-                selectedTaskManager.showAllTask();
+                selectedTaskManager.showAllTaskName();
                 selectedTask = findTask();
                 if(selectedTask != null){
-                   taskPage();
+                   editTaskPage();
+                }
+                else {
+                    System.out.println("Can't find the task that you enter");
+                    projectPage();
+                }
+                break;
+            case 4:
+                selectedTaskManager.showAllTaskName();
+                selectedTask = findTask();
+                if(selectedTask != null){
+                    selectedTaskManager.deleteTask(selectedTask);
                 }
                 else {
                     System.out.println("Can't find the task that you enter");
                 }
-                break;
-            case 4:
-                selectedProject.scheduleReport();
+                projectPage();
                 break;
             case 5:
+                selectedTaskManager.showAllTaskInformation();
+                System.out.print("Predecessor Task: ");
+                Task preDecessorTask = findTask();
+                if(preDecessorTask != null){
+                    System.out.print("Successor Task: ");
+                    Task successorTask = findTask();
+                    if(successorTask != null){
+                        if(selectedTaskManager.addDependency(preDecessorTask,successorTask)){
+                            System.out.println("Successfully add dependency");
+                        }else{
+                            System.out.println("Error: Can't add dependency");
+                        }
+                    }
+                    else {
+                        System.out.println("Invalid Successor Task");
+                    }
+                } else {
+                    System.out.println("Invalid Predecessor Task");
+                }
+                projectPage();
+                break;
+            case 6:
+                selectedTaskManager.showAllTaskInformation();
+                System.out.print("Predecessor Task: ");
+                Task removePreDecessorTask = findTask();
+                if(removePreDecessorTask != null){
+                    System.out.print("Successor Task: ");
+                    Task successorTask = findTask();
+                    if(successorTask != null){
+                        if(selectedTaskManager.removeDependency(removePreDecessorTask,successorTask)){
+                            System.out.println("Successfully delete dependency");
+                        }else {
+                            System.out.println("Error: Can't remove dependency");
+                        }
+                    }
+                    else {
+                        System.out.println("Invalid Successor Task");
+                    }
+                } else {
+                    System.out.println("Invalid Predecessor Task");
+                }
+                projectPage();
+               break;
+            case 7:
+                selectedProject.scheduleReport();
+                break;
+            case 8:
                 try {
                     projectManager.save(selectedProject);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
+            case 9:
+                Schedule.assignDate(selectedProject);
+                projectPage();
         }
     }
 
@@ -122,109 +182,65 @@ public class ProjectSchedulingApplication {
                 System.out.print("New Name: ");
                 String newName = scanner.nextLine();
                 selectedTask.setTaskName(newName);
-                taskPage();
+                projectPage();
                 break;
             case 2:
                 System.out.print("New Description: ");
                 String newDescription = scanner.nextLine();
                 selectedTask.setTaskDescription(newDescription);
-                taskPage();
+                projectPage();
                 break;
             case 3:
                 System.out.print("New Duration: ");
                 int newDuration = scanner.nextInt();
                 selectedTask.setDuration(newDuration);
                 scanner.nextLine();
-                taskPage();
+                projectPage();
                 break;
         }
 
     }
 
-    private static void taskPage(){
-        selectedTask.showTaskInformation();
-        System.out.println("1. Edit Task Information");
-        System.out.println("2. Add Dependency");
-        System.out.println("3. Remove Dependency");
-        System.out.println("4. Remove Task");
-        System.out.println("5. Back");
-        System.out.print("Enter: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        switch (choice){
-            case 1:
-                editTaskPage();
-                break;
-            case 2:
-                if(selectedTaskManager.showAllTaskExcept(selectedTask)){
-                    Task dependencyTask = findTaskExcept();
-                    if(dependencyTask != null){
-                        addDependency(dependencyTask);
-                    }else {
-                        System.out.println("There is no task");
-                    }
-                } else {
-                    System.out.println("There is no other task");
-                }
-                taskPage();
-                break;
-            case 3:
-                selectedTask.showAllDependency();
-                Task removeDependencyTask = findTaskExcept();
-                if(removeDependencyTask != null){
-                    removeDependency(removeDependencyTask);
-                }else {
-                    System.out.println("There is no task");
-                }
-                taskPage();
 
-                break;
-            case 4:
-                selectedTaskManager.deleteTask(selectedTask);
-                selectedTask = null;
-                projectPage();
-            case 5:
-                projectPage();
-                break;
-        }
-    }
-
-    public static void main(String[] args) {
-        System.out.println("Welcome to Project Scheduling Application");
-        int choice = -1;
-        do{
-                System.out.println("1. Create New Project");
-                System.out.println("2. Load Project");
-                System.out.println("3. Exit Program");
-                System.out.print("Enter: ");
-                choice = scanner.nextInt();
-                scanner.nextLine();
-
-                switch (choice) {
-                    case 1:
-                        System.out.println(" Create New Project");
-                        try {
-                            selectedProject = createNewProject();
-                            selectedTaskManager = selectedProject.getTaskList();
-                            projectPage();
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case 2:
-                        System.out.println("Load Project");
-                        try {
-                            loadProject();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case 3:
-                        System.out.println("Exiting Program...");
-                        break;
-                    default:
-                        System.out.println("Invalid menu choice. Please try again...");
-                }
-        }while(choice!=3);
+    public static void main(String[] args) throws ParseException {
+        selectedProject = new Project("1","1",simpleDateFormat.parse("20-04-2020"));
+        selectedTaskManager = selectedProject.getTaskManager();
+        projectPage();
+//        System.out.println("Welcome to Project Scheduling Application");
+//        int choice = -1;
+//        do{
+//                System.out.println("1. Create New Project");
+//                System.out.println("2. Load Project");
+//                System.out.println("3. Exit Program");
+//                System.out.print("Enter: ");
+//                choice = scanner.nextInt();
+//                scanner.nextLine();
+//
+//                switch (choice) {
+//                    case 1:
+//                        System.out.println(" Create New Project");
+//                        try {
+//                            selectedProject = createNewProject();
+//                            selectedTaskManager = selectedProject.getTaskList();
+//                            projectPage();
+//                        } catch (ParseException e) {
+//                            e.printStackTrace();
+//                        }
+//                        break;
+//                    case 2:
+//                        System.out.println("Load Project");
+//                        try {
+//                            loadProject();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        break;
+//                    case 3:
+//                        System.out.println("Exiting Program...");
+//                        break;
+//                    default:
+//                        System.out.println("Invalid menu choice. Please try again...");
+//                }
+//        }while(choice!=3);
     }
 }

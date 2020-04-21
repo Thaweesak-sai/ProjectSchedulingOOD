@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Task {
-    protected String taskName;
+    private String taskName;
     private String taskDescription;
     private Date startDate;
     private Date endDate;
@@ -66,41 +66,8 @@ public class Task {
     }
 
     public boolean removeDependency(Task successorTask){
-        dependencyList.remove(successorTask);
+        System.out.println(dependencyList.removeIf(dependency -> dependency.getSuccessorTask() == successorTask));
         return true;
-    }
-
-
-    public void showTaskInformation(){
-        System.out.println("Task Name: " + this.taskName);
-        System.out.println("Description: " + this.taskDescription);
-        System.out.println("Duration: " + this.duration);
-        if(startDate != null){
-            System.out.println("Start Date: " + this.startDate.toString());
-        }
-        else {
-            System.out.println("Start Date: -");
-        }
-        if(endDate != null){
-            System.out.println("End Date: " + this.endDate.toString());
-        }
-        else {
-            System.out.println("End Date: -");
-        }
-        if(dependencyList.size() == 0){
-            System.out.println("Dependency: -");
-        }
-        else {
-            showAllDependency();
-        }
-
-    }
-
-    public void showAllDependency(){
-        System.out.println("Dependency ");
-        for(Dependency dependency : dependencyList){
-            System.out.println("Task: " + dependency.getSuccessorTask().taskName);
-        }
     }
 
     @Override
