@@ -117,10 +117,15 @@ public class ProjectSchedulingApplication {
                     System.out.print("Successor Task: ");
                     Task successorTask = findTask();
                     if(successorTask != null){
-                        if(selectedTaskManager.addDependency(preDecessorTask,successorTask)){
-                            System.out.println("Successfully add dependency");
-                        }else{
-                            System.out.println("Error: Can't add dependency");
+                        boolean hasCycle = selectedTaskManager.hasCycle(preDecessorTask,successorTask);
+                        if(!hasCycle){
+                            if(selectedTaskManager.addDependency(preDecessorTask,successorTask)){
+                                System.out.println("Successfully add dependency");
+                            }else{
+                                System.out.println("Error: Can't add dependency");
+                            }
+                        }else {
+                            System.out.println("Error: Can't add dependency because it creates cycle");
                         }
                     }
                     else {

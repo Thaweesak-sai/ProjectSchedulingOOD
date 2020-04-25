@@ -64,6 +64,10 @@ public class TaskManager {
         }
     }
 
+    public List<Task> getTaskList() {
+        return taskList;
+    }
+
     private List<Task> getAllTask () {
         List<Task> availableTask = new ArrayList<Task>(taskList);
         availableTask.removeIf(task -> task instanceof Milestone);
@@ -231,6 +235,43 @@ public class TaskManager {
             task.setEndDate(null);
         }
         getEndMilestone().setEndDate(null);
+    }
+
+
+    public boolean hasCycle(Task preDecessorTask, Task successorTask){
+        List<Task> alreadyVisitedTask = new ArrayList<Task>();
+        preDecessorTask.addDependency(preDecessorTask,successorTask);
+        for(Dependency dependency : getStartMilestone().getDependencyList()){
+            if(iterateCycle(dependency.getSuccessorTask(),alreadyVisitedTask)){
+                preDecessorTask.removeDependency(successorTask);
+                System.out.println("Cycle Detected");
+                return true;
+            }
+            System.out.println();
+            alreadyVisitedTask.clear();
+        }
+        preDecessorTask.removeDependency(successorTask);
+        return false;
+    }
+
+
+    public static boolean iterateCycle(Task task,List<Task> alreadyVisitedTask) {
+        List<Dependency> dependencies = task.getDependencyList();
+        System.out.println(task.getTaskName());
+        if(alreadyVisitedTask.contains(task)){
+            return true;
+        }
+        else {
+            alreadyVisitedTask.add(task);
+            for(Dependency dependency : dependencies){
+                if(dependency.getSuccessorTask() != null && !(dependency.getSuccessorTask() instanceof Milestone)){
+                    if(iterateCycle(dependency.getSuccessorTask(),alreadyVisitedTask)){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }

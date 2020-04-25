@@ -1,5 +1,6 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,12 +15,16 @@ public class Schedule {
         TaskManager taskManager = project.getTaskManager();
         taskManager.resetDate();
         taskManager.getStartMilestone().setStartDate(project.getStartDate());
-        showGraph(taskManager.getStartMilestone());
+        for(Dependency dependency : taskManager.getStartMilestone().getDependencyList()){
+            System.out.print("START --> ");
+            iterate(dependency.getSuccessorTask(),taskManager.getStartMilestone());
+            System.out.println("END");
+            System.out.println();
+        }
         taskManager.showAllTaskInformation();
         taskManager.showTaskInformation(taskManager.getStartMilestone());
         taskManager.showTaskInformation(taskManager.getEndMilestone());
     }
-
 
     public static void iterate(Task task,Task preDecessorTask) {
         List<Dependency> dependencies = task.getDependencyList();
@@ -52,14 +57,6 @@ public class Schedule {
         }
     }
 
-    public static void showGraph(Task startMilestone) {
-        for(Dependency dependency : startMilestone.getDependencyList()){
-            System.out.print("START --> ");
-            iterate(dependency.getSuccessorTask(),startMilestone);
-            System.out.println("END");
-            System.out.println();
-        }
-    }
 
     private static Date getLatestDate(Date firstDate, Date secondDate)
     {

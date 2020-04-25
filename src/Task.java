@@ -66,7 +66,7 @@ public class Task {
     }
 
     public boolean removeDependency(Task successorTask){
-        System.out.println(dependencyList.removeIf(dependency -> dependency.getSuccessorTask() == successorTask));
+        dependencyList.removeIf(dependency -> dependency.getSuccessorTask() == successorTask);
         return true;
     }
 
