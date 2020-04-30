@@ -1,7 +1,4 @@
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class TaskManager {
@@ -43,8 +40,14 @@ public class TaskManager {
     public boolean deleteTask(Task deletedTask){
         List<Task> preDecessorList = getPreDecessorTask(deletedTask);
         for (Task task : preDecessorList){
-            task.removeDependency(deletedTask);
+            removeDependency(task,deletedTask);
         }
+        List<Task> successorTaskList = getSuccessorTask(deletedTask);
+        for (Task task : successorTaskList){
+            removeDependency(deletedTask,task);
+        }
+        System.out.println("test");
+        getStartMilestone().removeDependency(deletedTask);
         return taskList.remove(deletedTask);
     }
 
@@ -194,13 +197,13 @@ public class TaskManager {
         System.out.println("Description: " + task.getTaskDescription());
         System.out.println("Duration: " + task.getDuration());
         if(task.getStartDate() != null){
-            System.out.println("Start Date: " + DateFormatter.formatDate(task.getStartDate()));
+            System.out.println("Start Date: " + DateFormatter.formatDateToString(task.getStartDate()));
         }
         else {
             System.out.println("Start Date: -");
         }
         if(task.getEndDate() != null){
-            System.out.println("End Date: " + DateFormatter.formatDate(task.getEndDate()));
+            System.out.println("End Date: " + DateFormatter.formatDateToString(task.getEndDate()));
         }
         else {
             System.out.println("End Date: -");
@@ -229,12 +232,10 @@ public class TaskManager {
 
 
     public void resetDate(){
-        List<Task> allTask = getAllTask();
-        for(Task task : allTask){
+        for(Task task : taskList){
             task.setStartDate(null);
             task.setEndDate(null);
         }
-        getEndMilestone().setEndDate(null);
     }
 
 
@@ -257,7 +258,6 @@ public class TaskManager {
 
     public static boolean iterateCycle(Task task,List<Task> alreadyVisitedTask) {
         List<Dependency> dependencies = task.getDependencyList();
-        System.out.println(task.getTaskName());
         if(alreadyVisitedTask.contains(task)){
             return true;
         }

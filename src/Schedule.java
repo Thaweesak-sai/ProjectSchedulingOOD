@@ -1,5 +1,3 @@
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,16 +6,13 @@ import java.util.List;
 public class Schedule {
 
 
-    // End date still wrong because of getLatest method
-    // Need to reset all date in case of deleting and removing dependency
-
     public static void assignDate(Project project){
         TaskManager taskManager = project.getTaskManager();
         taskManager.resetDate();
         taskManager.getStartMilestone().setStartDate(project.getStartDate());
         for(Dependency dependency : taskManager.getStartMilestone().getDependencyList()){
             System.out.print("START --> ");
-            iterate(dependency.getSuccessorTask(),taskManager.getStartMilestone());
+            iterateAssignDate(dependency.getSuccessorTask(),taskManager.getStartMilestone());
             System.out.println("END");
             System.out.println();
         }
@@ -26,7 +21,7 @@ public class Schedule {
         taskManager.showTaskInformation(taskManager.getEndMilestone());
     }
 
-    public static void iterate(Task task,Task preDecessorTask) {
+    public static void iterateAssignDate(Task task, Task preDecessorTask) {
         List<Dependency> dependencies = task.getDependencyList();
         for(Dependency dependency : dependencies){
             if(preDecessorTask instanceof Milestone){
@@ -44,7 +39,7 @@ public class Schedule {
             System.out.print("Task " + task.getTaskName());
             if(dependency.getSuccessorTask() != null){
                 System.out.print(" --> ");
-                iterate(dependency.getSuccessorTask(),task);
+                iterateAssignDate(dependency.getSuccessorTask(),task);
             }
         }
         if(task instanceof Milestone){
@@ -56,7 +51,6 @@ public class Schedule {
 
         }
     }
-
 
     private static Date getLatestDate(Date firstDate, Date secondDate)
     {
