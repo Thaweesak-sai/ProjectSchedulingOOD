@@ -1,20 +1,24 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Dependency {
+public class Dependency
+{
     private Task preDecessorTask;
     private Task successorTask;
 
-    public Dependency(Task preDecessorTask,Task successorTask) {
+    public Dependency(Task preDecessorTask,Task successorTask)
+    {
         this.preDecessorTask = preDecessorTask;
         this.successorTask = successorTask;
     }
 
-    public Task getPreDecessorTask() {
+    public Task getPreDecessorTask()
+    {
         return preDecessorTask;
     }
 
-    public Task getSuccessorTask() {
+    public Task getSuccessorTask()
+    {
         return successorTask;
     }
 

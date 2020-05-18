@@ -1,25 +1,30 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskManager {
+public class TaskManager
+{
     private List<Task> taskList;
 
-    public TaskManager() {
+    public TaskManager()
+    {
         this.taskList = new ArrayList<Task>();
         taskList.add(new Milestone("Start","Starting Task"));
         taskList.add(new Milestone("End","Ending Task"));
     }
 
 
-    public Task getStartMilestone(){
+    public Task getStartMilestone()
+    {
         return taskList.get(0);
     }
 
-    public Task getEndMilestone(){
+    public Task getEndMilestone()
+    {
         return taskList.get(1);
     }
 
-    public boolean addTask(Task task){
+    public boolean addTask(Task task)
+    {
         Task startMilestone = getStartMilestone();
         startMilestone.addDependency(startMilestone,task);
         task.addDependency(task,getEndMilestone());
@@ -27,23 +32,29 @@ public class TaskManager {
         return true;
     }
 
-    public Task getTask(String taskName){
+    public Task getTask(String taskName)
+    {
         List<Task> allTask = getAllTask();
-        for(Task task : allTask){
-            if(task.getTaskName().equals(taskName)){
+        for(Task task : allTask)
+        {
+            if(task.getTaskName().equals(taskName))
+            {
                 return task;
             }
         }
         return null;
     }
 
-    public boolean deleteTask(Task deletedTask){
+    public boolean deleteTask(Task deletedTask)
+    {
         List<Task> preDecessorList = getPreDecessorTask(deletedTask);
-        for (Task task : preDecessorList){
+        for (Task task : preDecessorList)
+        {
             removeDependency(task,deletedTask);
         }
         List<Task> successorTaskList = getSuccessorTask(deletedTask);
-        for (Task task : successorTaskList){
+        for (Task task : successorTaskList)
+        {
             removeDependency(deletedTask,task);
         }
         System.out.println("test");
@@ -51,54 +62,67 @@ public class TaskManager {
         return taskList.remove(deletedTask);
     }
 
-    public void showAllTaskName(){
+    public void showAllTaskName()
+    {
         System.out.println("All the tasks in this project");
         List<Task> availableTask = getAllTask();
-        for(Task task : availableTask){
+        for(Task task : availableTask)
+        {
             System.out.println("Task : " + task.getTaskName());
         }
     }
 
-    public void showAllTaskInformation(){
+    public void showAllTaskInformation()
+    {
         System.out.println("All the tasks in this project");
         List<Task> availableTask = getAllTask();
-        for(Task task : availableTask){
+        for(Task task : availableTask)
+        {
             showTaskInformation(task);
         }
     }
 
-    public List<Task> getTaskList() {
+    public List<Task> getTaskList()
+    {
         return taskList;
     }
 
-    private List<Task> getAllTask () {
+    private List<Task> getAllTask ()
+    {
         List<Task> availableTask = new ArrayList<Task>(taskList);
         availableTask.removeIf(task -> task instanceof Milestone);
         return availableTask;
     }
 
-    private List<Task> getAvailableTask (Task selectedTask) {
+    private List<Task> getAvailableTask (Task selectedTask)
+    {
         List<Task> availableTask = new ArrayList<Task>(taskList);
         availableTask.remove(selectedTask);
         availableTask.removeIf(task -> task instanceof Milestone);
         return availableTask;
     }
 
-    private List<Task> getAvailableDependencyTask(Task selectedTask){
+    private List<Task> getAvailableDependencyTask(Task selectedTask)
+    {
         List<Task> availableTask = getAvailableTask(selectedTask);
-        for(Dependency dependency : selectedTask.getDependencyList()){
+        for(Dependency dependency : selectedTask.getDependencyList())
+        {
             availableTask.remove(dependency.getSuccessorTask());
         }
         return availableTask;
     }
 
-    private List<Task> getPreDecessorTask (Task selectedTask) {
+    private List<Task> getPreDecessorTask (Task selectedTask)
+    {
         List<Task> availableTask = getAvailableTask(selectedTask);
         List<Task> preDecessorList = new ArrayList<Task>();
-        for(Task task : availableTask){
+        for(Task task : availableTask)
+        {
             List<Dependency> dependencyList = task.getDependencyList();
-            for(Dependency dependency : dependencyList){
-                if(dependency.getSuccessorTask().equals(selectedTask)){
+            for(Dependency dependency : dependencyList)
+            {
+                if(dependency.getSuccessorTask().equals(selectedTask))
+                {
                     preDecessorList.add(task);
                 }
             }
@@ -106,48 +130,64 @@ public class TaskManager {
         return preDecessorList;
     }
 
-    private List<Task> getSuccessorTask(Task selectedTask){
+    private List<Task> getSuccessorTask(Task selectedTask)
+    {
         List<Dependency> dependencyList = selectedTask.getDependencyList();
         List<Task> successorTaskList = new ArrayList<Task>();
-        for(Dependency dependency : dependencyList){
+        for(Dependency dependency : dependencyList)
+        {
             successorTaskList.add(dependency.getSuccessorTask());
         }
         return successorTaskList;
     }
 
 
-    private void showPreDecessorTask(Task selectedTask){
+    private void showPreDecessorTask(Task selectedTask)
+    {
         List<Task> preDecessorList = getPreDecessorTask(selectedTask);
-        if(preDecessorList.size() != 0){
+        if(preDecessorList.size() != 0)
+        {
             System.out.println("Predecessor Task: ");
-            for(Task task : preDecessorList){
+            for(Task task : preDecessorList)
+            {
                 System.out.println("Task : " + task.getTaskName());
             }
-        } else {
+        }
+        else
+        {
             System.out.println("Predecessor Task: -");
         }
     }
 
-    private void showSuccessorTask(Task selectedTask){
+    private void showSuccessorTask(Task selectedTask)
+    {
         List<Task> successorTaskList = getSuccessorTask(selectedTask);
-        if(successorTaskList.size() != 0){
+        if(successorTaskList.size() != 0)
+        {
             System.out.println("Successor Task: ");
-            for(Task task : successorTaskList){
-                if(!task.equals(getEndMilestone())){
+            for(Task task : successorTaskList)
+            {
+                if(!task.equals(getEndMilestone()))
+                {
                     System.out.println("Task: " + task.getTaskName());
                 }
             }
-        } else {
+        }
+        else
+        {
             System.out.println("Successor Task: -");
         }
     }
 
 
 
-    public boolean addDependency(Task preDecessorTask, Task successorTask){
+    public boolean addDependency(Task preDecessorTask, Task successorTask)
+    {
         List<Dependency> checkList = preDecessorTask.getDependencyList();
-        for(Dependency dependency : checkList){
-            if(dependency.getPreDecessorTask().equals(preDecessorTask) && dependency.getSuccessorTask().equals(successorTask)){
+        for(Dependency dependency : checkList)
+        {
+            if(dependency.getPreDecessorTask().equals(preDecessorTask) && dependency.getSuccessorTask().equals(successorTask))
+            {
                 System.out.println("This dependency is already exist");
                 return false;
             }
@@ -159,15 +199,20 @@ public class TaskManager {
     }
 
 
-    public boolean removeDependency(Task preDecessorTask, Task successorTask){
+    public boolean removeDependency(Task preDecessorTask, Task successorTask)
+    {
         List<Dependency> checkList = preDecessorTask.getDependencyList();
-        for(Dependency dependency : checkList){
-            if(dependency.getPreDecessorTask().equals(preDecessorTask) && dependency.getSuccessorTask().equals(successorTask)){
+        for(Dependency dependency : checkList)
+        {
+            if(dependency.getPreDecessorTask().equals(preDecessorTask) && dependency.getSuccessorTask().equals(successorTask))
+            {
                 preDecessorTask.removeDependency(successorTask);
-                if(getSuccessorTask(preDecessorTask).size() == 0){
+                if(getSuccessorTask(preDecessorTask).size() == 0)
+                {
                     preDecessorTask.addDependency(preDecessorTask,getEndMilestone());
                 }
-                if(getPreDecessorTask(successorTask).size() == 0){
+                if(getPreDecessorTask(successorTask).size() == 0)
+                {
                     getStartMilestone().addDependency(getStartMilestone(),successorTask);
                 }
                 return true;
@@ -177,35 +222,44 @@ public class TaskManager {
     }
 
 
-    public boolean showAllTaskDependency (Task selectedTask){
+    public boolean showAllTaskDependency (Task selectedTask)
+    {
         List<Task> availableTask = getAvailableDependencyTask(selectedTask);
-        if(availableTask.size() > 0){
-            for (Task task : availableTask){
-                    System.out.println("Task: " + task.getTaskName());
-                }
+        if(availableTask.size() > 0)
+        {
+            for (Task task : availableTask)
+            {
+                System.out.println("Task: " + task.getTaskName());
+            }
             return true;
         }
-        else {
+        else
+        {
             return false;
         }
 
     }
 
-    public void showTaskInformation(Task task){
+    public void showTaskInformation(Task task)
+    {
         System.out.println("--------------------------------");
         System.out.println("Task Name: " + task.getTaskName());
         System.out.println("Description: " + task.getTaskDescription());
         System.out.println("Duration: " + task.getDuration());
-        if(task.getStartDate() != null){
+        if(task.getStartDate() != null)
+        {
             System.out.println("Start Date: " + DateFormatter.formatDateToString(task.getStartDate()));
         }
-        else {
+        else
+        {
             System.out.println("Start Date: -");
         }
-        if(task.getEndDate() != null){
+        if(task.getEndDate() != null)
+        {
             System.out.println("End Date: " + DateFormatter.formatDateToString(task.getEndDate()));
         }
-        else {
+        else
+        {
             System.out.println("End Date: -");
         }
         showPreDecessorTask(task);
@@ -215,63 +269,34 @@ public class TaskManager {
     }
 
 
-    public boolean showAllTaskExcept(Task selectedTask){
+    public boolean showAllTaskExcept(Task selectedTask)
+    {
         List<Task> availableTask = getAvailableTask(selectedTask);
-        if(availableTask.size() > 0){
+        if(availableTask.size() > 0)
+        {
             System.out.println("Available tasks in this project");
-            for (Task task : availableTask){
+            for (Task task : availableTask)
+            {
                     System.out.println("Task: " + task.getTaskName());
             }
             return true;
         }
-        else {
+        else
+        {
             return false;
         }
 
     }
 
 
-    public void resetDate(){
-        for(Task task : taskList){
+    public void resetDate()
+    {
+        for(Task task : taskList)
+        {
             task.setStartDate(null);
             task.setEndDate(null);
         }
     }
 
-
-    public boolean hasCycle(Task preDecessorTask, Task successorTask){
-        List<Task> alreadyVisitedTask = new ArrayList<Task>();
-        preDecessorTask.addDependency(preDecessorTask,successorTask);
-        for(Dependency dependency : getStartMilestone().getDependencyList()){
-            if(iterateCycle(dependency.getSuccessorTask(),alreadyVisitedTask)){
-                preDecessorTask.removeDependency(successorTask);
-                System.out.println("Cycle Detected");
-                return true;
-            }
-            System.out.println();
-            alreadyVisitedTask.clear();
-        }
-        preDecessorTask.removeDependency(successorTask);
-        return false;
-    }
-
-
-    public static boolean iterateCycle(Task task,List<Task> alreadyVisitedTask) {
-        List<Dependency> dependencies = task.getDependencyList();
-        if(alreadyVisitedTask.contains(task)){
-            return true;
-        }
-        else {
-            alreadyVisitedTask.add(task);
-            for(Dependency dependency : dependencies){
-                if(dependency.getSuccessorTask() != null && !(dependency.getSuccessorTask() instanceof Milestone)){
-                    if(iterateCycle(dependency.getSuccessorTask(),alreadyVisitedTask)){
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
 
 }
