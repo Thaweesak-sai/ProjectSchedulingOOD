@@ -65,7 +65,7 @@ public class ProjectSchedulingApplication {
         selectedProject.showProjectInformation();
         projectPage();
         return true;
-    }
+    } 
 
     private static void projectPage(){
         System.out.println("Project: "+ selectedProject.getName());
@@ -208,44 +208,43 @@ public class ProjectSchedulingApplication {
 
 
     public static void main(String[] args) throws ParseException {
-        selectedProject = new Project("1","1",simpleDateFormat.parse("20-04-2020"));
-        selectedTaskManager = selectedProject.getTaskManager();
-        projectPage();
-//        System.out.println("Welcome to Project Scheduling Application");
-//        int choice = -1;
-//        do{
-//                System.out.println("1. Create New Project");
-//                System.out.println("2. Load Project");
-//                System.out.println("3. Exit Program");
-//                System.out.print("Enter: ");
-//                choice = scanner.nextInt();
-//                scanner.nextLine();
-//
-//                switch (choice) {
-//                    case 1:
-//                        System.out.println(" Create New Project");
-//                        try {
-//                            selectedProject = createNewProject();
-//                            selectedTaskManager = selectedProject.getTaskList();
-//                            projectPage();
-//                        } catch (ParseException e) {
-//                            e.printStackTrace();
-//                        }
-//                        break;
-//                    case 2:
-//                        System.out.println("Load Project");
-//                        try {
-//                            loadProject();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                        break;
-//                    case 3:
-//                        System.out.println("Exiting Program...");
-//                        break;
-//                    default:
-//                        System.out.println("Invalid menu choice. Please try again...");
-//                }
-//        }while(choice!=3);
+//        selectedProject = new Project("1","1",simpleDateFormat.parse("20-04-2020"));
+//        selectedTaskManager = selectedProject.getTaskManager();
+//        projectPage();
+        System.out.println("Welcome to Project Scheduling Application");
+        int choice = -1;
+        do{
+                System.out.println("1. Create New Project");
+                System.out.println("2. Load Project");
+                System.out.println("3. Exit Program");
+                System.out.print("Enter: ");
+                choice = scanner.nextInt();
+                scanner.nextLine();
+                switch (choice) {
+                    case 1:
+                        System.out.println(" Create New Project");
+                        try {
+                            selectedProject = createNewProject();
+                            selectedTaskManager = selectedProject.getTaskManager();
+                            projectPage();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 2:
+                        System.out.println("Load Project");
+                        try {
+                            loadProject();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 3:
+                        System.out.println("Exiting Program...");
+                        break;
+                    default:
+                        System.out.println("Invalid menu choice. Please try again...");
+                }
+        }while(choice!=3);
     }
 }

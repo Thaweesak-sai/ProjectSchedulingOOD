@@ -3,6 +3,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.List;
 
 public class TextFileIO {
     private BufferedReader reader = null;
@@ -58,11 +59,25 @@ public class TextFileIO {
         }
     }
     public boolean writeProjectFile(Project project) throws IOException {
-        PrintWriter writer = new PrintWriter(project.getName()+".txt", StandardCharsets.UTF_8);
-        writer.println(project.getName());
-        writer.println(project.getDesc());
-        writer.println(project.getStartDate());
-        writer.println(project.getEndDate());
+        PrintWriter writer = new PrintWriter(project.getName()+".txt", String.valueOf(StandardCharsets.UTF_8));
+        writer.println("project:" +project.getName());
+        writer.println("project:" +project.getDesc());
+        writer.println("project:" +project.getStartDate());
+        writer.println("project:"+project.getEndDate());
+        int numberOfTask = project.getTaskManager().getTaskList().size();
+        List<Task> taskList = project.getTaskManager().getTaskList();
+        for(int i=0; i<numberOfTask;i++)
+        {
+            List<Dependency> taskDependency  = taskList.get(i).getDependencyList();
+            writer.println("task "+i+":"+taskList.get(i).getTaskName());
+            writer.println("task "+i+":"+taskList.get(i).getTaskDescription());
+            writer.println("task "+i+":"+taskList.get(i).getDuration());
+            writer.println("task "+i+":"+taskList.get(i).getStartDate());
+            writer.println("task "+i+":"+taskList.get(i).getEndDate());
+            for(int j=0; j<taskDependency.size();j++) {
+                writer.println("dependency " + i + ":" + taskDependency.get(j).getPreDecessorTask());
+                writer.println("dependency " + i + ":" + taskDependency.get(j).getSuccessorTask());
+        }
         /* ต้องมีข้อมูลอะไรบ้างใน file*/ /*จะเอา task มาใส่ยังไง*/
         return true;
     }
@@ -86,7 +101,7 @@ public class TextFileIO {
         return true;
     }
 
-    public String getAllFileName() {
+    public String getAllFileName(){
         Path currentPath = FileSystems.getDefault().getPath("").toAbsolutePath();
         System.out.println("Searching all files..." + currentPath);
         File folder = new File(String.valueOf(currentPath));
