@@ -103,8 +103,7 @@ public class ProjectSchedulingApplication {
 
     private static boolean loadProject() throws IOException, ParseException {
         projectManager.printAllProject();
-        System.out.print("Project name to load:");
-        String projectName = scanner.next();
+        String projectName = getStringInput("Project name to load:  ");
         projectManager.loadProject(projectName+".txt");
         selectedProject = projectManager.getProject(projectName);
         selectedProject.showProjectInformation();

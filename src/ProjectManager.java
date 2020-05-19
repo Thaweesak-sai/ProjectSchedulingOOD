@@ -22,9 +22,8 @@ public class ProjectManager {
     public void loadProject(String projectName) throws ParseException {
         Project loadedProject = textFileIO.readProjectFile(projectName);
         addProject(loadedProject);
-
-        
     }
+
     public void printAllProject() throws IOException {
         String stringReturned = textFileIO.getAllFileName();
         String[] allFileName = stringReturned.split("\\|");

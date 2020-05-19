@@ -147,7 +147,10 @@ public class TextFileIO {
         {
             Task preDecessorTask = loadedProjectTaskManager.getTask(dependencyData.get(j).get(0));
             Task successorTask = loadedProjectTaskManager.getTask(dependencyData.get(j).get(1));
-            preDecessorTask.addDependency(preDecessorTask,successorTask);
+            if(preDecessorTask != null && successorTask != null){
+                loadedProjectTaskManager.addDependency(preDecessorTask,successorTask);
+            }
+//            preDecessorTask.addDependency(preDecessorTask,successorTask);
         }
         close();
         return loadedProject;

@@ -145,6 +145,7 @@ public class TaskManager
     private void showPreDecessorTask(Task selectedTask)
     {
         List<Task> preDecessorList = getPreDecessorTask(selectedTask);
+
         if(preDecessorList.size() != 0)
         {
             System.out.println("Predecessor Task: ");
@@ -162,15 +163,13 @@ public class TaskManager
     private void showSuccessorTask(Task selectedTask)
     {
         List<Task> successorTaskList = getSuccessorTask(selectedTask);
+        successorTaskList.remove(getEndMilestone());
         if(successorTaskList.size() != 0)
         {
             System.out.println("Successor Task: ");
             for(Task task : successorTaskList)
             {
-                if(!task.equals(getEndMilestone()))
-                {
                     System.out.println("Task: " + task.getTaskName());
-                }
             }
         }
         else
