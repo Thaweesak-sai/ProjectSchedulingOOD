@@ -57,6 +57,8 @@ public class Project {
         System.out.println("Project name: "+projectName);
         System.out.println("Project description: "+projectDesc);
         System.out.println("Start date: "+startDate);
+        if (endDate!=null)
+            System.out.println("End date: "+endDate);
     }
     public void calculateSchedule() {
 

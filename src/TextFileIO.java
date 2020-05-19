@@ -6,6 +6,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TextFileIO {
@@ -60,31 +61,35 @@ public class TextFileIO {
             System.out.println("ERROR can't close the file");
         }
     }
-    /**
-     *  แก้ตรงต้อง parse เป็น String ให้หมดเพื่อ make sure
-     * */
+
     public boolean writeProjectFile(Project project) throws IOException {
         PrintWriter writer = new PrintWriter(project.getName() + ".txt", String.valueOf(StandardCharsets.UTF_8));
-        writer.println("project:" + project.getName());
-        writer.println("project:" + project.getDesc());
-        writer.println("project:" + project.getStartDate());
-        writer.println("project:" + project.getEndDate());
+        writer.println("project|" + project.getName());
+        writer.println("project|" + project.getDesc());
+        writer.println("project|" + DateFormatter.formatDateToString(project.getStartDate()));
+        if(project.getEndDate()!=null)
+            writer.println("project|" + DateFormatter.formatDateToString(project.getEndDate()));
         int numberOfTask = project.getTaskManager().getTaskList().size();
         List<Task> taskList = project.getTaskManager().getTaskList();
-        for( int i=0;i < numberOfTask; i++) {
+        for( int i=0;i < numberOfTask; i++)
+        {
             List<Dependency> taskDependency = taskList.get(i).getDependencyList();
-            writer.println("task:" + taskList.get(i).getTaskName());
-            writer.println("task:" + taskList.get(i).getTaskDescription());
-            writer.println("task:" + taskList.get(i).getDuration());
-            writer.println("task:" + taskList.get(i).getStartDate());
-            writer.println("task:" + taskList.get(i).getEndDate());
-            writer.println("ENDTASK: ");
-            for (int j = 0; j < taskDependency.size(); j++) {
-                writer.println("dependency:" + taskDependency.get(j).getPreDecessorTask());
-                writer.println("dependency:" + taskDependency.get(j).getSuccessorTask());
-                writer.println("ENDDEPENDENCY: ");
+            writer.println("task|" + taskList.get(i).getTaskName());
+            writer.println("task|" + taskList.get(i).getTaskDescription());
+            writer.println("task|" + taskList.get(i).getDuration());
+            if(taskList.get(i).getStartDate()!=null)
+                writer.println("task|" + DateFormatter.formatDateToString(taskList.get(i).getStartDate()));
+            if(taskList.get(i).getEndDate()!=null)
+                writer.println("task|" + DateFormatter.formatDateToString(taskList.get(i).getEndDate()));
+            writer.println("ENDTASK| ");
+            for (int j = 0; j < taskDependency.size(); j++)
+            {
+                writer.println("dependency|" + taskDependency.get(j).getPreDecessorTask());
+                writer.println("dependency|" + taskDependency.get(j).getSuccessorTask());
+                writer.println("ENDDEPENDENCY| ");
             }
         }
+        writer.close();
         return true;
     }
     public Project readProjectFile(String fileName) throws ParseException {
@@ -96,54 +101,55 @@ public class TextFileIO {
         openProjectFile(fileName);
         String currentLine = null;
         while((currentLine = getNextLine())!=null){
-            String[] line = currentLine.split(":");
+            String[] line = currentLine.split("\\|");
             String lineHeader = line[0];
             String lineData = line[1];
-            if(lineHeader.equals("project"))
-            {
-                projectData.add(lineData);
-            }
-            else if (lineHeader.equals("ENDTASK"))
-            {
-                taskCount++;
-            }
-            else if(lineHeader.equals("task"))
-            {
-                taskData.get(taskCount).add(lineData);
-
-            }
-            else if (lineHeader.equals("ENDDEPENDENCY"))
-            {
-                dependencyCount++;
-            }
-            else if(lineHeader.equals("dependency"))
-            {
-                dependencyData.get(dependencyCount).add(lineData);
-            }
-            else
-            {
-                System.out.println("ERROR on reading");
-                break;
+            switch (lineHeader) {
+                case "project":
+                    projectData.add(lineData);
+                    break;
+                case "ENDTASK":
+                    taskCount++;
+                    break;
+                case "task":
+                    taskData.add(new ArrayList<>());
+                    taskData.get(taskCount).add(lineData);
+                    break;
+                case "ENDDEPENDENCY":
+                    dependencyCount++;
+                    break;
+                case "dependency":
+                    dependencyData.add(new ArrayList<>());
+                    dependencyData.get(dependencyCount).add(lineData);
+                    break;
+                default:
+                    System.out.println("ERROR on reading");
+                    break;
             }
         }
         Project loadedProject = new Project(projectData.get(0),projectData.get(1),
                 DateFormatter.formatStringToDate(projectData.get(2)));
-        if(projectData.get(3)!=null) {
+        if(projectData.size()==4) {
             loadedProject.setEndDate(DateFormatter.formatStringToDate(projectData.get(3)));
         }
+        TaskManager loadedProjectTaskManager= loadedProject.getTaskManager();
+        /* load tasks in the project*/
         for(int i=0;i<taskCount;i++)
         {
             Task loadedTask = new Task(taskData.get(i).get(0),taskData.get(i).get(1),Integer.parseInt(taskData.get(i).get(2)));
-            if(taskData.get(i).get(3)!=null)
+            if(taskData.get(i).size()>=4)
                 loadedTask.setStartDate(DateFormatter.formatStringToDate(taskData.get(i).get(3)));
-            if(taskData.get(i).get(4)!=null)
+            if(taskData.get(i).size()>=5)
                 loadedTask.setEndDate(DateFormatter.formatStringToDate(taskData.get(i).get(4)));
-            for(int j=0;j<dependencyCount;j++)
-            {
-                /* น่าจะต้องสร้าง task ให้หมดแล้วค่อยสร้าง dependency*/
-//                Dependency loadedDependency = new Dependency(dependencyData.);
-            }
+            loadedProjectTaskManager.addTask(loadedTask);
         }
+        for(int j=0;j<dependencyCount;j++)
+        {
+            Task preDecessorTask = loadedProjectTaskManager.getTask(dependencyData.get(j).get(0));
+            Task successorTask = loadedProjectTaskManager.getTask(dependencyData.get(j).get(1));
+            preDecessorTask.addDependency(preDecessorTask,successorTask);
+        }
+        return loadedProject;
     }
 
     public boolean deleteProjectFile(Project project) throws IOException {
@@ -168,18 +174,19 @@ public class TextFileIO {
 
     public String getAllFileName(){
         Path currentPath = FileSystems.getDefault().getPath("").toAbsolutePath();
-        System.out.println("Searching all files..." + currentPath);
+        System.out.println("Searching all files in " + currentPath + " ....");
         File folder = new File(String.valueOf(currentPath));
         File[] projectFileList = folder.listFiles((file, name) -> name.endsWith(".txt"));
-        StringBuilder filesName = null;
         if(projectFileList==null)
         {
             return "Project file can't be found in "+currentPath;
         }
-       for (File file :projectFileList){
-           filesName.append(file.getName());
-           filesName.append(".");
-       }
-       return filesName.toString();
+        String allFileName = projectFileList[0].getName();
+        allFileName = allFileName.concat("|");
+        for (int i =1;i<projectFileList.length;i++) {
+            allFileName = allFileName.concat(projectFileList[i].getName());
+            allFileName = allFileName.concat("|");
+        }
+        return allFileName;
     }
 }

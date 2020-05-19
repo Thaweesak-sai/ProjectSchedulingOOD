@@ -1,5 +1,7 @@
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ProjectManager {
     private static ArrayList<Project> projectList = new ArrayList<>();
@@ -15,17 +17,21 @@ public class ProjectManager {
             }
         return true;
     }
-    public void loadAllProject(){
-        String allFileNames = textFileIO.getAllFileName();
-        String [] buffer = allFileNames.split(".");
-        for(int i=0;i<buffer.length;i++)
-        {
-        }
+
+
+    public void loadProject(String projectName) throws ParseException {
+        Project loadedProject = textFileIO.readProjectFile(projectName);
+        addProject(loadedProject);
 
         
     }
     public void printAllProject() throws IOException {
-        System.out.println(textFileIO.getAllFileName());
+        String stringReturned = textFileIO.getAllFileName();
+        String[] allFileName = stringReturned.split("\\|");
+        for (String s : allFileName) {
+            System.out.println(s);
+        }
+
     }
     public Boolean deleteProject(Project project) throws IOException {
         return textFileIO.deleteProjectFile(project);
@@ -41,7 +47,8 @@ public class ProjectManager {
         return null;
     }
     public Boolean save(Project project) throws IOException {
-        textFileIO.writeProjectFile(project);
-        return true;
+        if(textFileIO.writeProjectFile(project))
+            return true;
+        return false;
     }
 }

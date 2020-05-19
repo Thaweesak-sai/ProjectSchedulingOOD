@@ -1,0 +1,31 @@
+project|1
+project|1
+project|20-04-2020
+task|Start
+task|Starting Task
+task|0
+ENDTASK| 
+dependency|Task{taskName='Start', taskDescription='Starting Task', startDate=null, endDate=null, duration=0, dependencyList=[Dependency@520a3426, Dependency@18eed359]}
+dependency|Task{taskName='Start', taskDescription='Starting Task', startDate=null, endDate=null, duration=0, dependencyList=[Dependency@3e9b1010]}
+ENDDEPENDENCY| 
+dependency|Task{taskName='Start', taskDescription='Starting Task', startDate=null, endDate=null, duration=0, dependencyList=[Dependency@520a3426, Dependency@18eed359]}
+dependency|Task{taskName='End', taskDescription='Ending Task', startDate=null, endDate=null, duration=0, dependencyList=[Dependency@6c3708b3]}
+ENDDEPENDENCY| 
+task|End
+task|Ending Task
+task|0
+ENDTASK| 
+task|Start
+task|Starting Task
+task|0
+ENDTASK| 
+dependency|Task{taskName='Start', taskDescription='Starting Task', startDate=null, endDate=null, duration=0, dependencyList=[Dependency@3e9b1010]}
+dependency|Task{taskName='End', taskDescription='Ending Task', startDate=null, endDate=null, duration=0, dependencyList=[]}
+ENDDEPENDENCY| 
+task|End
+task|Ending Task
+task|0
+ENDTASK| 
+dependency|Task{taskName='End', taskDescription='Ending Task', startDate=null, endDate=null, duration=0, dependencyList=[Dependency@6c3708b3]}
+dependency|Task{taskName='End', taskDescription='Ending Task', startDate=null, endDate=null, duration=0, dependencyList=[]}
+ENDDEPENDENCY| 
