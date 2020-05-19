@@ -1,0 +1,30 @@
+project|Test
+project|test1
+project|12-03-2020
+task|task1
+task|task1Desc
+task|1
+task|12-03-2020
+task|12-03-2020
+ENDTASK| 
+dependency|Task{taskName='task1', taskDescription='task1Desc', startDate=Wed Mar 12 00:00:00 ICT 1477, endDate=Wed Mar 12 00:00:00 ICT 1477, duration=1, dependencyList=[Dependency@1d16f93d]}
+dependency|Task{taskName='task2', taskDescription='task2Desc', startDate=Tue Mar 18 00:00:00 ICT 1477, endDate=Tue Mar 18 00:00:00 ICT 1477, duration=1, dependencyList=[Dependency@67b92f0a]}
+ENDDEPENDENCY| 
+task|task2
+task|task2Desc
+task|1
+task|18-03-2020
+task|18-03-2020
+ENDTASK| 
+dependency|Task{taskName='task2', taskDescription='task2Desc', startDate=Tue Mar 18 00:00:00 ICT 1477, endDate=Tue Mar 18 00:00:00 ICT 1477, duration=1, dependencyList=[Dependency@67b92f0a]}
+dependency|Task{taskName='End', taskDescription='Ending Task', startDate=null, endDate=Tue Mar 18 00:00:00 ICT 1477, duration=0, dependencyList=[]}
+ENDDEPENDENCY| 
+task|task3
+task|task3Desc
+task|5
+task|12-03-2020
+task|17-03-2020
+ENDTASK| 
+dependency|Task{taskName='task3', taskDescription='task3Desc', startDate=Wed Mar 12 00:00:00 ICT 1477, endDate=Mon Mar 17 00:00:00 ICT 1477, duration=5, dependencyList=[Dependency@2b9627bc]}
+dependency|Task{taskName='task2', taskDescription='task2Desc', startDate=Tue Mar 18 00:00:00 ICT 1477, endDate=Tue Mar 18 00:00:00 ICT 1477, duration=1, dependencyList=[Dependency@67b92f0a]}
+ENDDEPENDENCY| 

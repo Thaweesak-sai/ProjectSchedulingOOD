@@ -87,7 +87,7 @@ public class TaskManager
         return taskList;
     }
 
-    private List<Task> getAllTask ()
+    public List<Task> getAllTask ()
     {
         List<Task> availableTask = new ArrayList<Task>(taskList);
         availableTask.removeIf(task -> task instanceof Milestone);

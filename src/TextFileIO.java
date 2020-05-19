@@ -63,14 +63,14 @@ public class TextFileIO {
     }
 
     public boolean writeProjectFile(Project project) throws IOException {
-        PrintWriter writer = new PrintWriter(project.getName() + ".txt", String.valueOf(StandardCharsets.UTF_8));
+        PrintWriter writer = new PrintWriter(new FileOutputStream(project.getName() + ".txt", Boolean.parseBoolean(String.valueOf(StandardCharsets.UTF_8))),false);
         writer.println("project|" + project.getName());
         writer.println("project|" + project.getDesc());
         writer.println("project|" + DateFormatter.formatDateToString(project.getStartDate()));
         if(project.getEndDate()!=null)
             writer.println("project|" + DateFormatter.formatDateToString(project.getEndDate()));
-        int numberOfTask = project.getTaskManager().getTaskList().size();
-        List<Task> taskList = project.getTaskManager().getTaskList();
+        int numberOfTask = project.getTaskManager().getAllTask().size();
+        List<Task> taskList = project.getTaskManager().getAllTask();
         for( int i=0;i < numberOfTask; i++)
         {
             List<Dependency> taskDependency = taskList.get(i).getDependencyList();
@@ -84,8 +84,8 @@ public class TextFileIO {
             writer.println("ENDTASK| ");
             for (int j = 0; j < taskDependency.size(); j++)
             {
-                writer.println("dependency|" + taskDependency.get(j).getPreDecessorTask());
-                writer.println("dependency|" + taskDependency.get(j).getSuccessorTask());
+                writer.println("dependency|" + taskDependency.get(j).getPreDecessorTask().getTaskName());
+                writer.println("dependency|" + taskDependency.get(j).getSuccessorTask().getTaskName());
                 writer.println("ENDDEPENDENCY| ");
             }
         }
@@ -149,6 +149,7 @@ public class TextFileIO {
             Task successorTask = loadedProjectTaskManager.getTask(dependencyData.get(j).get(1));
             preDecessorTask.addDependency(preDecessorTask,successorTask);
         }
+        close();
         return loadedProject;
     }
 

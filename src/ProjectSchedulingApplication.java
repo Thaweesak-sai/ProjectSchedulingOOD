@@ -106,11 +106,16 @@ public class ProjectSchedulingApplication {
         System.out.print("Project name to load:");
         String projectName = scanner.next();
         projectManager.loadProject(projectName+".txt");
-        selectedProject = projectManager.getProject(projectName);  /* Load ไฟล์โปรเจคยังไม่มาแล้วจะเอาอะไรมาให้.... */
+        selectedProject = projectManager.getProject(projectName);
         selectedProject.showProjectInformation();
+        System.out.println("Show all task name");
+        selectedProject.getTaskManager().showAllTaskName();
+        System.out.println("Show all task information");
+        selectedProject.getTaskManager().showAllTaskInformation();
         projectPage();
         return true;
     } 
+
 
     private static void projectPage()
     {
@@ -127,12 +132,7 @@ public class ProjectSchedulingApplication {
         switch (choice)
         {
             case 1:
-                System.out.println("== Edit project information page ==");
-                selectedProject.showProjectInformation();
-                System.out.println("1. Edit project name");
-                System.out.println("2. Edit project description");
-                System.out.println("3. Edit project start date");
-                int editChoice = getIntegerInput("Enter: ");
+                editProjectPage();
                 break;
             case 2:
                 selectedTask = addNewTask();
@@ -253,7 +253,35 @@ public class ProjectSchedulingApplication {
                 break;
         }
     }
-
+    private static void editProjectPage()
+    {
+        System.out.println("== Edit project information page ==");
+        selectedProject.showProjectInformation();
+        int choice;
+        do{
+        System.out.println("Select which fields to edit: ");
+        System.out.println("1. Project name");
+        System.out.println("2. Project description");
+        System.out.println("3. Project start date");
+        System.out.println("4. Exit to Project Page");
+        choice = getIntegerInput("Enter: ");
+        switch (choice)
+        {
+            case 1:
+                String newName = getStringInput("New Name: ");
+                selectedProject.setName(newName);
+                break;
+            case 2:
+                String newDescription = getStringInput("New Description: ");
+                selectedProject.setDesc(newDescription);
+                break;
+            case 3:
+                Date newStartDate = getDateInput("New Start Date: ");
+                selectedProject.setStartDate(newStartDate);
+                break;
+        } }while (choice !=4);
+        projectPage();
+    }
     private static void editTaskPage(){
         System.out.println("Select which fields to edit: ");
         System.out.println("1. Task Name");
@@ -296,7 +324,6 @@ public class ProjectSchedulingApplication {
                 System.out.print("Enter: ");
                 choice = scanner.nextInt();
                 scanner.nextLine();
-
                 switch (choice) {
                     case 1:
                         System.out.println(" Create New Project");
