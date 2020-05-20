@@ -2,13 +2,13 @@ project|local
 project|local
 project|20-05-2020
 project|28-05-2020
-task|1
+task|TEST
 task|1
 task|2
 task|20-05-2020
 task|21-05-2020
 ENDTASK| 
-dependency|1
+dependency|TEST
 dependency|2
 ENDDEPENDENCY| 
 task|2

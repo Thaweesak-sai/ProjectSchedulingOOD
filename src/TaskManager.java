@@ -30,14 +30,28 @@ public class TaskManager
         task.addDependency(task,getEndMilestone());
         taskList.add(task);
         return true;
+
     }
+
+    public boolean checkTaskName(String taskName)
+    {
+        for(Task checkTask : taskList)
+        {
+            if(checkTask.getTaskName().toLowerCase().equals(taskName.toLowerCase()))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public Task getTask(String taskName)
     {
         List<Task> allTask = getAllTask();
         for(Task task : allTask)
         {
-            if(task.getTaskName().equals(taskName))
+            if(task.getTaskName().toLowerCase().equals(taskName.toLowerCase()))
             {
                 return task;
             }
@@ -74,7 +88,6 @@ public class TaskManager
 
     public void showAllTaskInformation()
     {
-        System.out.println("All the tasks in this project");
         List<Task> availableTask = getAllTask();
         for(Task task : availableTask)
         {

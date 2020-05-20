@@ -45,7 +45,9 @@ public class Project {
     public void setEndDate(LocalDate endDate){
         this.endDate = endDate;
     }
-    public void scheduleReport(){
+
+    public void scheduleReport()
+    {
         this.showProjectInformation();
         this.taskManager.showAllTaskInformation();
         this.taskManager.showTaskInformation(taskManager.getStartMilestone());
@@ -58,11 +60,19 @@ public class Project {
 
 
     public void showProjectInformation(){
+        System.out.println("--------------------------------");
         System.out.println("Project name: "+projectName);
         System.out.println("Project description: "+projectDesc);
         System.out.println("Start date: "+ DateFormatter.formatDateToStringForDisplay(startDate));
         if (endDate!=null)
+        {
             System.out.println("End date: "+ DateFormatter.formatDateToStringForDisplay(endDate));
+        }
+        else
+        {
+            System.out.println("End date: -");
+        }
+        System.out.println("--------------------------------");
     }
 
 

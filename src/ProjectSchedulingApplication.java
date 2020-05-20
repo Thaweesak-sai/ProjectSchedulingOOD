@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +15,7 @@ import java.util.Scanner;
 public class ProjectSchedulingApplication {
     private static Scanner scanner = new Scanner(System.in);
     private static TaskManager selectedTaskManager;
-    private static ProjectManager projectManager = new ProjectManager();
+    private static ProjectManager projectManager = ProjectManager.getInstance();
     private static Project selectedProject;
     private static Task selectedTask;
 
@@ -68,7 +69,14 @@ public class ProjectSchedulingApplication {
             try
             {
                 date = DateFormatter.formatStringToDate(buffer);
-                break;
+                if(date.getDayOfWeek() != DayOfWeek.SATURDAY && date.getDayOfWeek() != DayOfWeek.SUNDAY)
+                {
+                   break;
+                }
+                else
+                {
+                    System.out.println("Starting date can't be on weekend. Please try again!!!");
+                }
             }
             catch (DateTimeParseException e)
             {
@@ -92,8 +100,15 @@ public class ProjectSchedulingApplication {
         String taskDescription = getStringInput("Description: ");
         int duration = getIntegerInput("Duration: " );
         Task task = new Task(taskName,taskDescription,duration);
-        selectedTaskManager.addTask(task);
-        return task;
+        if(selectedTaskManager.checkTaskName(taskName))
+        {
+            selectedTaskManager.addTask(task);
+            return task;
+        }
+        else
+        {
+            return null;
+        }
     }
 
 
@@ -114,9 +129,7 @@ public class ProjectSchedulingApplication {
         selectedProject = projectManager.getProject(projectName);
         selectedTaskManager = selectedProject.getTaskManager();
         selectedProject.showProjectInformation();
-        System.out.println("Show all task name");
         selectedTaskManager.showAllTaskName();
-        System.out.println("Show all task information");
         selectedTaskManager.showAllTaskInformation();
         projectPage();
         return true;
@@ -142,7 +155,15 @@ public class ProjectSchedulingApplication {
                 break;
             case 2:
                 selectedTask = addNewTask();
-                Schedule.assignDate(selectedProject);
+                if(selectedTask != null)
+                {
+                    System.out.println("Successfully create a task");
+                    Schedule.assignDate(selectedProject);
+                }
+                else
+                {
+                    System.out.println("There is already this task name in this project. Please try again!!!");
+                }
                 projectPage();
                 break;
             case 3:
@@ -151,6 +172,7 @@ public class ProjectSchedulingApplication {
                     selectedTask = findTask("Task Name: ");
                     if(selectedTask != null)
                     {
+                        selectedTaskManager.showTaskInformation(selectedTask);
                         editTaskPage();
                     }
                     else
@@ -303,13 +325,19 @@ public class ProjectSchedulingApplication {
         System.out.println("2. Task Description");
         System.out.println("3. Task Duration");
         System.out.print("Enter: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+        int choice = getIntegerInput("Enter: ");
         switch (choice)
         {
             case 1:
                 String newName = getStringInput("New Name: ");
-                selectedTask.setTaskName(newName);
+                if(selectedTaskManager.checkTaskName(newName))
+                {
+                    selectedTask.setTaskName(newName);
+                }
+                else
+                {
+                    System.out.println("There is already this task name in this project. Please try again!!!");
+                }
                 projectPage();
                 break;
             case 2:
