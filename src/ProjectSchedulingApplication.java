@@ -146,7 +146,8 @@ public class ProjectSchedulingApplication {
         System.out.println("5. Add Task Dependency");
         System.out.println("6. Remove Task Dependency");
         System.out.println("7. Print Schedule Report");
-        System.out.println("8. Save & Exit");
+        System.out.println("8. Display Gantt Chart");
+        System.out.println("9. Save & Exit");
         int choice = getIntegerInput("Enter: ");
         switch (choice)
         {
@@ -273,6 +274,10 @@ public class ProjectSchedulingApplication {
                 projectPage();
                 break;
             case 8:
+                selectedProject.getGanttChart();
+                projectPage();
+                break;
+            case 9:
                 try
                 {
                     if(projectManager.save(selectedProject))

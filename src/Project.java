@@ -74,6 +74,9 @@ public class Project {
         }
         System.out.println("--------------------------------");
     }
-
+    public void getGanttChart(){
+        GanttChart ganttChart = new GanttChart(this);
+        ganttChart.getGanttChart();
+    }
 
 }
