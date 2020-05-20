@@ -1,13 +1,14 @@
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Project {
     private TaskManager taskManager;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String projectName;
     private String projectDesc;
 
-    public Project(String projectName, String projectDesc, Date startDate)
+    public Project(String projectName, String projectDesc, LocalDate startDate)
     {
         System.out.println(projectName +" is successfully created");
         this.projectName = projectName;
@@ -32,20 +33,23 @@ public class Project {
     public void setDesc(String description){
         this.projectDesc = description;
     }
-    public Date getStartDate(){
+    public LocalDate getStartDate(){
         return this.startDate;
     }
-    public void setStartDate(Date startDate){
+    public void setStartDate(LocalDate startDate){
         this.startDate = startDate;
     }
-    public Date getEndDate(){
+    public LocalDate getEndDate(){
         return this.endDate;
     }
-    public void setEndDate(Date endDate){
+    public void setEndDate(LocalDate endDate){
         this.endDate = endDate;
     }
     public void scheduleReport(){
-        System.out.println("Wait for motivation");
+        this.showProjectInformation();
+        this.taskManager.showAllTaskInformation();
+        this.taskManager.showTaskInformation(taskManager.getStartMilestone());
+        this.taskManager.showTaskInformation(taskManager.getEndMilestone());
     }
     public Boolean save(){
         
@@ -56,12 +60,10 @@ public class Project {
     public void showProjectInformation(){
         System.out.println("Project name: "+projectName);
         System.out.println("Project description: "+projectDesc);
-        System.out.println("Start date: "+startDate);
+        System.out.println("Start date: "+ DateFormatter.formatDateToStringForDisplay(startDate));
         if (endDate!=null)
-            System.out.println("End date: "+endDate);
+            System.out.println("End date: "+ DateFormatter.formatDateToStringForDisplay(endDate));
     }
-    public void calculateSchedule() {
 
-    }
 
 }

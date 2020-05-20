@@ -11,6 +11,7 @@ import java.util.List;
 
 public class TextFileIO {
     private BufferedReader reader = null;
+
     public void openProjectFile(String fileName){
         boolean bOk = true;
         try
@@ -66,9 +67,9 @@ public class TextFileIO {
         PrintWriter writer = new PrintWriter(new FileOutputStream(project.getName() + ".txt", Boolean.parseBoolean(String.valueOf(StandardCharsets.UTF_8))),false);
         writer.println("project|" + project.getName());
         writer.println("project|" + project.getDesc());
-        writer.println("project|" + DateFormatter.formatDateToString(project.getStartDate()));
+        writer.println("project|" + DateFormatter.formatDateToStringForSaving(project.getStartDate()));
         if(project.getEndDate()!=null)
-            writer.println("project|" + DateFormatter.formatDateToString(project.getEndDate()));
+            writer.println("project|" + DateFormatter.formatDateToStringForSaving(project.getEndDate()));
         int numberOfTask = project.getTaskManager().getAllTask().size();
         List<Task> taskList = project.getTaskManager().getAllTask();
         for( int i=0;i < numberOfTask; i++)
@@ -78,9 +79,9 @@ public class TextFileIO {
             writer.println("task|" + taskList.get(i).getTaskDescription());
             writer.println("task|" + taskList.get(i).getDuration());
             if(taskList.get(i).getStartDate()!=null)
-                writer.println("task|" + DateFormatter.formatDateToString(taskList.get(i).getStartDate()));
+                writer.println("task|" + DateFormatter.formatDateToStringForSaving(taskList.get(i).getStartDate()));
             if(taskList.get(i).getEndDate()!=null)
-                writer.println("task|" + DateFormatter.formatDateToString(taskList.get(i).getEndDate()));
+                writer.println("task|" + DateFormatter.formatDateToStringForSaving(taskList.get(i).getEndDate()));
             writer.println("ENDTASK| ");
             for (int j = 0; j < taskDependency.size(); j++)
             {
@@ -92,6 +93,7 @@ public class TextFileIO {
         writer.close();
         return true;
     }
+
     public Project readProjectFile(String fileName) throws ParseException {
         ArrayList<String> projectData = new ArrayList<>();
         ArrayList<ArrayList<String>> taskData = new ArrayList<ArrayList<String>>();
@@ -150,7 +152,6 @@ public class TextFileIO {
             if(preDecessorTask != null && successorTask != null){
                 loadedProjectTaskManager.addDependency(preDecessorTask,successorTask);
             }
-//            preDecessorTask.addDependency(preDecessorTask,successorTask);
         }
         close();
         return loadedProject;

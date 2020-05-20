@@ -82,16 +82,21 @@ public class TaskManager
         }
     }
 
-    public List<Task> getTaskList()
-    {
-        return taskList;
-    }
+
 
     public List<Task> getAllTask ()
     {
         List<Task> availableTask = new ArrayList<Task>(taskList);
         availableTask.removeIf(task -> task instanceof Milestone);
         return availableTask;
+    }
+
+    public boolean isTaskListEmpty(){
+
+        if(getAllTask().size() == 0){
+            return true;
+        }
+        return false;
     }
 
     private List<Task> getAvailableTask (Task selectedTask)
@@ -247,7 +252,7 @@ public class TaskManager
         System.out.println("Duration: " + task.getDuration());
         if(task.getStartDate() != null)
         {
-            System.out.println("Start Date: " + DateFormatter.formatDateToString(task.getStartDate()));
+            System.out.println("Start Date: " + DateFormatter.formatDateToStringForDisplay(task.getStartDate()));
         }
         else
         {
@@ -255,7 +260,7 @@ public class TaskManager
         }
         if(task.getEndDate() != null)
         {
-            System.out.println("End Date: " + DateFormatter.formatDateToString(task.getEndDate()));
+            System.out.println("End Date: " + DateFormatter.formatDateToStringForDisplay(task.getEndDate()));
         }
         else
         {
@@ -268,24 +273,6 @@ public class TaskManager
     }
 
 
-    public boolean showAllTaskExcept(Task selectedTask)
-    {
-        List<Task> availableTask = getAvailableTask(selectedTask);
-        if(availableTask.size() > 0)
-        {
-            System.out.println("Available tasks in this project");
-            for (Task task : availableTask)
-            {
-                    System.out.println("Task: " + task.getTaskName());
-            }
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    }
 
 
     public void resetDate()

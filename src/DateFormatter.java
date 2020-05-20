@@ -1,19 +1,31 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateFormatter
 {
-    private static String pattern = "dd-MM-yyyy";
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
-    public static String formatDateToString(Date date)
+    public static String formatDateToStringForDisplay(LocalDate date)
     {
-        return simpleDateFormat.format(date);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("E dd MMM uuuu",new Locale("en"));
+        return dateTimeFormatter.format(date);
     }
 
-    public static Date formatStringToDate(String date) throws ParseException
+
+    public static String formatDateToStringForSaving(LocalDate date)
     {
-        return simpleDateFormat.parse(date);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-uuuu");
+        return dateTimeFormatter.format(date);
+    }
+
+    public static LocalDate formatStringToDate(String date) throws DateTimeParseException
+    {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-uuuu").withResolverStyle(ResolverStyle.STRICT);
+        return LocalDate.parse(date,dateTimeFormatter);
     }
 }

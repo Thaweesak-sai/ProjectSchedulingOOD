@@ -1,11 +1,12 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class Task {
     private String taskName;
     private String taskDescription;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private int duration;
     private ArrayList<Dependency> dependencyList;
 
@@ -37,22 +38,22 @@ public class Task {
         this.taskDescription = taskDescription;
     }
 
-    public Date getStartDate()
+    public LocalDate getStartDate()
     {
         return startDate;
     }
 
-    public void setStartDate(Date startDate)
+    public void setStartDate(LocalDate startDate)
     {
         this.startDate = startDate;
     }
 
-    public Date getEndDate()
+    public LocalDate getEndDate()
     {
         return endDate;
     }
 
-    public void setEndDate(Date endDate)
+    public void setEndDate(LocalDate endDate)
     {
         this.endDate = endDate;
     }

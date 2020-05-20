@@ -1,3 +1,6 @@
+import java.text.ParseException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,9 +20,7 @@ public class Schedule {
             System.out.println("END");
             System.out.println();
         }
-        taskManager.showAllTaskInformation();
-        taskManager.showTaskInformation(taskManager.getStartMilestone());
-        taskManager.showTaskInformation(taskManager.getEndMilestone());
+        project.setEndDate(taskManager.getEndMilestone().getEndDate());
     }
 
     public static void iterateAssignDate(Task task, Task preDecessorTask)
@@ -33,10 +34,10 @@ public class Schedule {
             }
             else
             {
-                Date newStartDate = incrementDaysExcludingWeekends(preDecessorTask.getEndDate(),2);
+                LocalDate newStartDate = addDaysSkippingWeekends(preDecessorTask.getEndDate(),1);
                 if(task.getStartDate() != null)
                 {
-                    Date latestDate = getLatestDate(task.getStartDate(),newStartDate);
+                    LocalDate latestDate = getLatestDate(task.getStartDate(),newStartDate);
                     task.setStartDate(latestDate);
                 }
                 else
@@ -44,7 +45,7 @@ public class Schedule {
                     task.setStartDate(newStartDate);
                 }
             }
-            task.setEndDate(incrementDaysExcludingWeekends(task.getStartDate(),task.getDuration()));
+            task.setEndDate(addDaysSkippingWeekends(task.getStartDate(),task.getDuration() - 1 ));
             System.out.print("Task " + task.getTaskName());
             if(dependency.getSuccessorTask() != null)
             {
@@ -66,13 +67,26 @@ public class Schedule {
         }
     }
 
-    private static Date getLatestDate(Date firstDate, Date secondDate)
+//    private static Date getLatestDate(Date firstDate, Date secondDate)
+//    {
+//        Calendar firstDateCalendar = Calendar.getInstance();
+//        Calendar secondDateCalendar = Calendar.getInstance();
+//        firstDateCalendar.setTime(firstDate);
+//        secondDateCalendar.setTime(secondDate);
+//        int result = firstDateCalendar.compareTo(secondDateCalendar);
+//        if(result >= 0)
+//        {
+//            return firstDate;
+//        }
+//        else
+//        {
+//            return secondDate;
+//        }
+//    }
+
+    private static LocalDate getLatestDate(LocalDate firstDate, LocalDate secondDate)
     {
-        Calendar firstDateCalendar = Calendar.getInstance();
-        Calendar secondDateCalendar = Calendar.getInstance();
-        firstDateCalendar.setTime(firstDate);
-        secondDateCalendar.setTime(secondDate);
-        int result = firstDateCalendar.compareTo(secondDateCalendar);
+        int result = firstDate.compareTo(secondDate);
         if(result >= 0)
         {
             return firstDate;
@@ -84,37 +98,49 @@ public class Schedule {
     }
 
 
-    public static Date incrementDaysExcludingWeekends(Date startDate, int duration)
-    {
-        Calendar calendar = Calendar.getInstance();
-        // format of date is passed as an argument
-        // base date which will be incremented
-        // set calendar time with given date
-        calendar.setTime(startDate);
-        // add days to date
-        calendar.add(Calendar.DAY_OF_WEEK, duration-1);
-        // check if the date after addition is a working day.
-        // If not then keep on incrementing it till it is a working day
-        while(!isWorkingDay(calendar.getTime(), calendar))
-        {
-            calendar.add(Calendar.DAY_OF_WEEK, 1);
+//    public static Date incrementDaysExcludingWeekends(Date startDate, int duration)
+//    {
+//        Calendar calendar = Calendar.getInstance();
+//        // format of date is passed as an argument
+//        // base date which will be incremented
+//        // set calendar time with given date
+//        calendar.setTime(startDate);
+//        // add days to date
+//        calendar.add(Calendar.DAY_OF_WEEK, duration-1);
+//        // check if the date after addition is a working day.
+//        // If not then keep on incrementing it till it is a working day
+//        while(!isWorkingDay(calendar.getTime(), calendar))
+//        {
+//            calendar.add(Calendar.DAY_OF_WEEK, 1);
+//        }
+////        simpleDateFormat.format(calendar.getTime());
+//        return calendar.getTime();
+//    }
+
+    public static LocalDate addDaysSkippingWeekends(LocalDate date, int duration) {
+        LocalDate result = date;
+        int addedDays = 0;
+        while (addedDays < duration) {
+            result = result.plusDays(1);
+            if (!(result.getDayOfWeek() == DayOfWeek.SATURDAY || result.getDayOfWeek() == DayOfWeek.SUNDAY)) {
+                addedDays++;
+            }
         }
-//        simpleDateFormat.format(calendar.getTime());
-        return calendar.getTime();
+        return result;
     }
 
-    private static  boolean isWorkingDay(Date date, Calendar calendar)
-    {
-        // set calendar time with given date
-        calendar.setTime(date);
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        // check if it is Saturday(day=7) or Sunday(day=1)
-        if ((dayOfWeek == 7) || (dayOfWeek == 1))
-        {
-            return false;
-        }
-        return true;
-    }
+//    private static  boolean isWorkingDay(Date date, Calendar calendar)
+//    {
+//        // set calendar time with given date
+//        calendar.setTime(date);
+//        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+//        // check if it is Saturday(day=7) or Sunday(day=1)
+//        if ((dayOfWeek == 7) || (dayOfWeek == 1))
+//        {
+//            return false;
+//        }
+//        return true;
+//    }
 
 
     public static boolean hasCycle(TaskManager taskManager,Task preDecessorTask, Task successorTask)

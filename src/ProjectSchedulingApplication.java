@@ -1,7 +1,14 @@
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.FormatStyle;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class ProjectSchedulingApplication {
@@ -51,9 +58,9 @@ public class ProjectSchedulingApplication {
         return input;
     }
 
-    private static Date getDateInput(String label)
+    private static LocalDate getDateInput(String label)
     {
-        Date date;
+        LocalDate date;
         while(true)
         {
             System.out.print(label);
@@ -63,7 +70,7 @@ public class ProjectSchedulingApplication {
                 date = DateFormatter.formatStringToDate(buffer);
                 break;
             }
-            catch (ParseException e)
+            catch (DateTimeParseException e)
             {
                 System.out.println("Invalid input. Please try again!!!");
             }
@@ -72,6 +79,11 @@ public class ProjectSchedulingApplication {
     }
 
 
+    private static Task findTask(String label)
+    {
+        String inputTask = getStringInput(label);
+        return selectedTaskManager.getTask(inputTask);
+    }
 
 
     private static Task addNewTask()
@@ -84,18 +96,12 @@ public class ProjectSchedulingApplication {
         return task;
     }
 
-    private static Task findTask()
-    {
-        String inputTask = getStringInput("Task Name: ");
-        return selectedTaskManager.getTask(inputTask);
-    }
-
 
     private static Project createNewProject()
     {
         String projectName = getStringInput("Project Name: ");
         String projectDesc = getStringInput("Project description: ");
-        Date date = getDateInput("Start date (DD-MM-YYYY): ");
+        LocalDate date = getDateInput("Start date (DD-MM-YYYY): ");
         Project newProject = new Project(projectName,projectDesc,date);
         projectManager.addProject(newProject);
         return newProject;
@@ -106,11 +112,12 @@ public class ProjectSchedulingApplication {
         String projectName = getStringInput("Project name to load:  ");
         projectManager.loadProject(projectName+".txt");
         selectedProject = projectManager.getProject(projectName);
+        selectedTaskManager = selectedProject.getTaskManager();
         selectedProject.showProjectInformation();
         System.out.println("Show all task name");
-        selectedProject.getTaskManager().showAllTaskName();
+        selectedTaskManager.showAllTaskName();
         System.out.println("Show all task information");
-        selectedProject.getTaskManager().showAllTaskInformation();
+        selectedTaskManager.showAllTaskInformation();
         projectPage();
         return true;
     } 
@@ -135,27 +142,37 @@ public class ProjectSchedulingApplication {
                 break;
             case 2:
                 selectedTask = addNewTask();
+                Schedule.assignDate(selectedProject);
                 projectPage();
                 break;
             case 3:
-                selectedTaskManager.showAllTaskName();
-                selectedTask = findTask();
-                if(selectedTask != null)
-                {
-                   editTaskPage();
+                if(!selectedTaskManager.isTaskListEmpty()){
+                    selectedTaskManager.showAllTaskName();
+                    selectedTask = findTask("Task Name: ");
+                    if(selectedTask != null)
+                    {
+                        editTaskPage();
+                    }
+                    else
+                    {
+                        System.out.println("Can't find the task that you enter");
+                        projectPage();
+                    }
                 }
                 else
                 {
-                    System.out.println("Can't find the task that you enter");
+                    System.out.println("There is no tasks in this project");
                     projectPage();
                 }
+
                 break;
             case 4:
                 selectedTaskManager.showAllTaskName();
-                selectedTask = findTask();
+                selectedTask = findTask("Task Name: ");
                 if(selectedTask != null)
                 {
                     selectedTaskManager.deleteTask(selectedTask);
+                    Schedule.assignDate(selectedProject);
                 }
                 else
                 {
@@ -165,12 +182,10 @@ public class ProjectSchedulingApplication {
                 break;
             case 5:
                 selectedTaskManager.showAllTaskInformation();
-                System.out.print("Predecessor Task: ");
-                Task preDecessorTask = findTask();
+                Task preDecessorTask = findTask("Predecessor Task: ");
                 if(preDecessorTask != null)
                 {
-                    System.out.print("Successor Task: ");
-                    Task successorTask = findTask();
+                    Task successorTask = findTask("Successor Task: ");
                     if(successorTask != null)
                     {
                         boolean hasCycle = Schedule.hasCycle(selectedTaskManager,preDecessorTask,successorTask);
@@ -179,6 +194,7 @@ public class ProjectSchedulingApplication {
                             if(selectedTaskManager.addDependency(preDecessorTask,successorTask))
                             {
                                 System.out.println("Successfully add dependency");
+                                Schedule.assignDate(selectedProject);
                             }
                             else
                             {
@@ -203,17 +219,16 @@ public class ProjectSchedulingApplication {
                 break;
             case 6:
                 selectedTaskManager.showAllTaskInformation();
-                System.out.print("Predecessor Task: ");
-                Task removePreDecessorTask = findTask();
+                Task removePreDecessorTask = findTask("Predecessor Task: ");
                 if(removePreDecessorTask != null)
                 {
-                    System.out.print("Successor Task: ");
-                    Task successorTask = findTask();
+                    Task successorTask = findTask("Successor Task: ");
                     if(successorTask != null)
                     {
                         if(selectedTaskManager.removeDependency(removePreDecessorTask,successorTask))
                         {
                             System.out.println("Successfully delete dependency");
+                            Schedule.assignDate(selectedProject);
                         }
                         else
                         {
@@ -232,7 +247,6 @@ public class ProjectSchedulingApplication {
                 projectPage();
                break;
             case 7:
-                Schedule.assignDate(selectedProject);
                 selectedProject.scheduleReport();
                 projectPage();
                 break;
@@ -275,12 +289,14 @@ public class ProjectSchedulingApplication {
                 selectedProject.setDesc(newDescription);
                 break;
             case 3:
-                Date newStartDate = getDateInput("New Start Date: ");
+                LocalDate newStartDate = getDateInput("New Start Date: ");
                 selectedProject.setStartDate(newStartDate);
+                Schedule.assignDate(selectedProject);
                 break;
         } }while (choice !=4);
         projectPage();
     }
+
     private static void editTaskPage(){
         System.out.println("Select which fields to edit: ");
         System.out.println("1. Task Name");
@@ -304,6 +320,7 @@ public class ProjectSchedulingApplication {
             case 3:
                 int newDuration = getIntegerInput("New Duration: ");
                 selectedTask.setDuration(newDuration);
+                Schedule.assignDate(selectedProject);
                 projectPage();
                 break;
         }
@@ -311,18 +328,13 @@ public class ProjectSchedulingApplication {
 
 
     public static void main(String[] args) throws ParseException {
-//        selectedProject = new Project("1","1",DateFormatter.formatStringToDate("20-04-2020"));
-//        selectedTaskManager = selectedProject.getTaskManager();
-//        projectPage();
         System.out.println("Welcome to Project Scheduling Application");
-        int choice = -1;
+        int choice;
         do{
                 System.out.println("1. Create New Project");
                 System.out.println("2. Load Project");
                 System.out.println("3. Exit Program");
-                System.out.print("Enter: ");
-                choice = scanner.nextInt();
-                scanner.nextLine();
+                choice = getIntegerInput("Enter: ");
                 switch (choice) {
                     case 1:
                         System.out.println(" Create New Project");
@@ -335,7 +347,7 @@ public class ProjectSchedulingApplication {
                         try {
                             loadProject();
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            System.out.println("Error: Can't load the project file");
                         }
                         break;
                     case 3:
