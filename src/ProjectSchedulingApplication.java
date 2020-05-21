@@ -25,7 +25,7 @@ public class ProjectSchedulingApplication {
     private static Task selectedTask;
 
 
-    
+
     private static String getStringInput(String label)
     {
         String input;
