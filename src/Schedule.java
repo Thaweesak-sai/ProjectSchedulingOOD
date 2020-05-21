@@ -20,10 +20,10 @@ public class Schedule {
         taskManager.getStartMilestone().setStartDate(project.getStartDate());
         for(Dependency dependency : taskManager.getStartMilestone().getDependencyList())
         {
-            System.out.print("START --> ");
+//            System.out.print("START --> ");
             iterateAssignDate(dependency.getSuccessorTask(),taskManager.getStartMilestone());
-            System.out.println("END");
-            System.out.println();
+//            System.out.println("END");
+//            System.out.println();
         }
         project.setEndDate(taskManager.getEndMilestone().getEndDate());
     }
@@ -56,10 +56,10 @@ public class Schedule {
                 }
             }
             task.setEndDate(addDaysSkippingWeekends(task.getStartDate(),task.getDuration() - 1 ));
-            System.out.print("Task " + task.getTaskName());
+//            System.out.print("Task " + task.getTaskName());
             if(dependency.getSuccessorTask() != null)
             {
-                System.out.print(" --> ");
+//                System.out.print(" --> ");
                 iterateAssignDate(dependency.getSuccessorTask(),task);
             }
         }
@@ -175,11 +175,14 @@ public class Schedule {
     {
         List<Task> alreadyVisitedTask = new ArrayList<Task>();
         preDecessorTask.addDependency(preDecessorTask,successorTask);
+        preDecessorTask.removeDependency(taskManager.getEndMilestone());
         for(Dependency dependency : taskManager.getStartMilestone().getDependencyList())
         {
             if(iterateCycle(dependency.getSuccessorTask(),alreadyVisitedTask))
             {
                 preDecessorTask.removeDependency(successorTask);
+                preDecessorTask.addDependency(preDecessorTask,taskManager.getEndMilestone());
+                taskManager.removeDependency(preDecessorTask,successorTask);
                 System.out.println("Cycle Detected");
                 return true;
             }
@@ -187,6 +190,7 @@ public class Schedule {
             alreadyVisitedTask.clear();
         }
         preDecessorTask.removeDependency(successorTask);
+        preDecessorTask.addDependency(preDecessorTask,taskManager.getEndMilestone());
         return false;
     }
 
@@ -199,6 +203,11 @@ public class Schedule {
     public static boolean iterateCycle(Task task,List<Task> alreadyVisitedTask)
     {
         List<Dependency> dependencies = task.getDependencyList();
+//        for(Task task1: alreadyVisitedTask){
+//            System.out.print(task1.getTaskName());
+//        }
+//        System.out.println();
+//        System.out.println("task to add: "+ task.getTaskName());
         if(alreadyVisitedTask.contains(task))
         {
             return true;
@@ -208,8 +217,15 @@ public class Schedule {
             alreadyVisitedTask.add(task);
             for(Dependency dependency : dependencies)
             {
-                if(dependency.getSuccessorTask() != null && !(dependency.getSuccessorTask() instanceof Milestone))
+//                System.out.println("In " + task.getTaskName());
+//                System.out.println("Pre: " + dependency.getPreDecessorTask().getTaskName());
+//                System.out.println("Suc: " + dependency.getSuccessorTask().getTaskName());
+                if(dependency.getSuccessorTask() != null )
                 {
+                    if(dependency.getSuccessorTask() instanceof Milestone){
+                        alreadyVisitedTask.clear();
+                    }
+
                     if(iterateCycle(dependency.getSuccessorTask(),alreadyVisitedTask))
                     {
                         return true;

@@ -59,8 +59,6 @@ public class Project {
     {
         this.showProjectInformation();
         this.taskManager.showAllTaskInformation();
-        this.taskManager.showTaskInformation(taskManager.getStartMilestone());
-        this.taskManager.showTaskInformation(taskManager.getEndMilestone());
     }
     public Boolean save(){
         
