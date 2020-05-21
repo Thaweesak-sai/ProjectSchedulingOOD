@@ -202,82 +202,103 @@ public class ProjectSchedulingApplication {
 
                 break;
             case 4:
-                selectedTaskManager.showAllTaskName();
-                selectedTask = findTask("Task Name: ");
-                if(selectedTask != null)
+                if(!selectedTaskManager.isTaskListEmpty())
                 {
-                    selectedTaskManager.deleteTask(selectedTask);
-                    Schedule.assignDate(selectedProject);
+                    selectedTaskManager.showAllTaskName();
+                    selectedTask = findTask("Task Name: ");
+                    if(selectedTask != null)
+                    {
+                        selectedTaskManager.deleteTask(selectedTask);
+                        Schedule.assignDate(selectedProject);
+                    }
+                    else
+                    {
+                        System.out.println("Can't find the task that you enter");
+                    }
                 }
                 else
                 {
-                    System.out.println("Can't find the task that you enter");
+                    System.out.println("There is no tasks in this project");
                 }
+
                 projectPage();
                 break;
             case 5:
-                selectedTaskManager.showAllTaskInformation();
-                Task preDecessorTask = findTask("Predecessor Task: ");
-                if(preDecessorTask != null)
-                {
-                    Task successorTask = findTask("Successor Task: ");
-                    if(successorTask != null)
+                if(!selectedTaskManager.isTaskListEmpty()){
+                    selectedTaskManager.showAllTaskInformation();
+                    Task preDecessorTask = findTask("Predecessor Task: ");
+                    if(preDecessorTask != null)
                     {
-                        boolean hasCycle = Schedule.hasCycle(selectedTaskManager,preDecessorTask,successorTask);
-                        if(!hasCycle)
+                        Task successorTask = findTask("Successor Task: ");
+                        if(successorTask != null)
                         {
-                            if(selectedTaskManager.addDependency(preDecessorTask,successorTask))
+                            boolean hasCycle = Schedule.hasCycle(selectedTaskManager,preDecessorTask,successorTask);
+                            if(!hasCycle)
                             {
-                                System.out.println("Successfully add dependency");
+                                if(selectedTaskManager.addDependency(preDecessorTask,successorTask))
+                                {
+                                    System.out.println("Successfully add dependency");
+                                    Schedule.assignDate(selectedProject);
+                                }
+                                else
+                                {
+                                    System.out.println("Error: Can't add dependency");
+                                }
+                            }
+                            else
+                            {
+                                System.out.println("Error: Can't add dependency because it creates cycle");
+                            }
+                        }
+                        else
+                        {
+                            System.out.println("Invalid Successor Task");
+                        }
+                    }
+                    else
+                    {
+                        System.out.println("Invalid Predecessor Task");
+                    }
+                }
+                else
+                {
+                    System.out.println("There is no task in the project");
+                }
+
+                projectPage();
+                break;
+            case 6:
+                if(!selectedTaskManager.isTaskListEmpty()){
+                    selectedTaskManager.showAllTaskInformation();
+                    Task removePreDecessorTask = findTask("Predecessor Task: ");
+                    if(removePreDecessorTask != null)
+                    {
+                        Task successorTask = findTask("Successor Task: ");
+                        if(successorTask != null)
+                        {
+                            if(selectedTaskManager.removeDependency(removePreDecessorTask,successorTask))
+                            {
+                                System.out.println("Successfully delete dependency");
                                 Schedule.assignDate(selectedProject);
                             }
                             else
                             {
-                                System.out.println("Error: Can't add dependency");
+                                System.out.println("Error: Can't remove dependency");
                             }
                         }
                         else
                         {
-                            System.out.println("Error: Can't add dependency because it creates cycle");
+                            System.out.println("Invalid Successor Task");
                         }
                     }
                     else
                     {
-                        System.out.println("Invalid Successor Task");
+                        System.out.println("Invalid Predecessor Task");
                     }
                 }
                 else
                 {
-                    System.out.println("Invalid Predecessor Task");
-                }
-                projectPage();
-                break;
-            case 6:
-                selectedTaskManager.showAllTaskInformation();
-                Task removePreDecessorTask = findTask("Predecessor Task: ");
-                if(removePreDecessorTask != null)
-                {
-                    Task successorTask = findTask("Successor Task: ");
-                    if(successorTask != null)
-                    {
-                        if(selectedTaskManager.removeDependency(removePreDecessorTask,successorTask))
-                        {
-                            System.out.println("Successfully delete dependency");
-                            Schedule.assignDate(selectedProject);
-                        }
-                        else
-                        {
-                            System.out.println("Error: Can't remove dependency");
-                        }
-                    }
-                    else
-                    {
-                        System.out.println("Invalid Successor Task");
-                    }
-                }
-                else
-                {
-                    System.out.println("Invalid Predecessor Task");
+                    System.out.println("There is no task in this project");
                 }
                 projectPage();
                break;
