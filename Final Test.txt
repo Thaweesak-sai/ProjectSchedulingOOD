@@ -1,0 +1,94 @@
+project|Final Test
+project|Final Test
+project|21-05-2020
+project|22-06-2020
+task|Task 1: The longest Task name ever ever been made.
+task|Shit
+task|20
+task|21-05-2020
+task|17-06-2020
+ENDTASK| 
+dependency|Task 1: The longest Task name ever ever been made.
+dependency|Task4
+ENDDEPENDENCY| 
+task|Task2
+task|2
+task|5
+task|21-05-2020
+task|27-05-2020
+ENDTASK| 
+dependency|Task2
+dependency|End
+ENDDEPENDENCY| 
+task|Task3
+task|3
+task|1
+task|21-05-2020
+task|21-05-2020
+ENDTASK| 
+dependency|Task3
+dependency|End
+ENDDEPENDENCY| 
+task|Task4
+task|4
+task|3
+task|18-06-2020
+task|22-06-2020
+ENDTASK| 
+dependency|Task4
+dependency|End
+ENDDEPENDENCY| 
+task|task5
+task|5
+task|15
+task|21-05-2020
+task|10-06-2020
+ENDTASK| 
+dependency|task5
+dependency|End
+ENDDEPENDENCY| 
+task|task 6
+task|18
+task|18
+task|21-05-2020
+task|15-06-2020
+ENDTASK| 
+dependency|task 6
+dependency|End
+ENDDEPENDENCY| 
+task|task 7
+task|7
+task|1
+task|26-05-2020
+task|26-05-2020
+ENDTASK| 
+dependency|task 7
+dependency|End
+ENDDEPENDENCY| 
+task|task 8
+task|8
+task|1
+task|21-05-2020
+task|21-05-2020
+ENDTASK| 
+dependency|task 8
+dependency|End
+ENDDEPENDENCY| 
+task|task 9
+task|9
+task|1
+task|21-05-2020
+task|21-05-2020
+ENDTASK| 
+dependency|task 9
+dependency|End
+ENDDEPENDENCY| 
+task|task 10
+task|0.5
+task|3
+task|21-05-2020
+task|25-05-2020
+ENDTASK| 
+dependency|task 10
+dependency|task 7
+ENDDEPENDENCY| 
