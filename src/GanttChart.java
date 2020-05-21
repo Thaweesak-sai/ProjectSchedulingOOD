@@ -46,8 +46,8 @@ public class GanttChart {
         /* if there is no task in the project */
         if(taskManager.getAllTask().size()==0)
         {
-            System.out.println("\n\n");
-            System.out.println("||\t\tThere is no task to build gantt chart\t\t||\n\n");
+            System.out.println("\n");
+            System.out.println("\t\tThis project doesn't have any task!!\t\t");
         }
         else
         {

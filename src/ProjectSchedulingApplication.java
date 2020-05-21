@@ -120,6 +120,7 @@ public class ProjectSchedulingApplication {
 
     private static Project createNewProject()
     {
+
         String projectName = getStringInput("Project Name: ");
         String projectDesc = getStringInput("Project description: ");
         LocalDate date = getDateInput("Start date (DD-MM-YYYY): ");
@@ -128,7 +129,8 @@ public class ProjectSchedulingApplication {
         return newProject;
     }
 
-    private static boolean loadProject() throws IOException, ParseException {
+    private static boolean loadProject() throws IOException, ParseException
+    {
         projectManager.printAllProject();
         String projectName = getStringInput("Project name to load:  ");
         projectManager.loadProject(projectName+".txt");
@@ -144,7 +146,9 @@ public class ProjectSchedulingApplication {
 
     private static void projectPage()
     {
-        System.out.println("Project: "+ selectedProject.getName());
+        System.out.println("\n=========================================");
+        System.out.println("\t\t\tProject: "+ selectedProject.getName());
+        System.out.println("=========================================");
         System.out.println("1. Edit Project Information");
         System.out.println("2. Add New Task");
         System.out.println("3. Edit Task Information");
@@ -153,7 +157,9 @@ public class ProjectSchedulingApplication {
         System.out.println("6. Remove Task Dependency");
         System.out.println("7. Print Schedule Report");
         System.out.println("8. Display Gantt Chart");
-        System.out.println("9. Save & Exit");
+        System.out.println("9. Delete Project");
+        System.out.println("10. Discard changes");
+        System.out.println("11. Save & Exit");
         int choice = getIntegerInput("Enter: ");
         switch (choice)
         {
@@ -284,11 +290,57 @@ public class ProjectSchedulingApplication {
                 projectPage();
                 break;
             case 9:
+                while(true)
+                {
+                    String confirm = getStringInput("Are you sure to delete? (Y/N) :  ");
+                    if (confirm.equals("Y"))
+                    {
+                        try {
+                            projectManager.deleteProject(selectedProject);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("Returning to home page...");
+                        break;
+                    }
+                    else if (confirm.equals("N"))
+                    {
+                        projectPage();
+                        break;
+                    }
+                    else
+                    {
+                        System.out.println("Please input only 'Y' or 'N'");
+                    }
+                }
+                break;
+            case 10:
+                while(true)
+                {
+                    String confirm = getStringInput("Are you sure to discard? (Y/N) :  ");
+                    if (confirm.equals("Y"))
+                    {
+                        System.out.println("Discard Changes");
+                        System.out.println("Returning to home page...");
+                        break;
+                    }
+                    else if (confirm.equals("N"))
+                    {
+                        projectPage();
+                        break;
+                    }
+                    else
+                    {
+                        System.out.println("Please input only 'Y' or 'N'");
+                    }
+                }
+                break;
+            case 11:
                 try
                 {
                     projectManager.save(selectedProject);
                     System.out.println("Successfully saved");
-                    System.out.println("Exiting...");
+                    System.out.println("Returning to home page...");
                 }
                 catch (IOException e)
                 {
@@ -299,7 +351,9 @@ public class ProjectSchedulingApplication {
     }
     private static void editProjectPage()
     {
-        System.out.println("== Edit project information page ==");
+        System.out.println("=========================================");
+        System.out.println("\tEdit Project Information Page ");
+        System.out.println("=========================================");
         selectedProject.showProjectInformation();
         int choice;
         do{
@@ -329,43 +383,52 @@ public class ProjectSchedulingApplication {
     }
 
     private static void editTaskPage(){
+        System.out.println("=========================================");
+        System.out.println("\tEdit Task Page ");
+        System.out.println("=========================================");
         System.out.println("Select which fields to edit: ");
         System.out.println("1. Task Name");
         System.out.println("2. Task Description");
         System.out.println("3. Task Duration");
-        System.out.print("Enter: ");
-        int choice = getIntegerInput("Enter: ");
-        switch (choice)
-        {
-            case 1:
-                String newName = getStringInput("New Name: ");
-                if(selectedTaskManager.checkTaskName(newName))
-                {
-                    selectedTask.setTaskName(newName);
-                }
-                else
-                {
-                    System.out.println("There is already this task name in this project. Please try again!!!");
-                }
-                projectPage();
-                break;
-            case 2:
-                String newDescription = getStringInput("New Description: ");
-                selectedTask.setTaskDescription(newDescription);
-                projectPage();
-                break;
-            case 3:
-                int newDuration = getIntegerInput("New Duration: ");
-                selectedTask.setDuration(newDuration);
-                Schedule.assignDate(selectedProject);
-                projectPage();
-                break;
-        }
+        System.out.println("4. Exit to Project Page");
+        int choice;
+        do{
+            choice = getIntegerInput("Enter: ");
+            switch (choice)
+            {
+                case 1:
+                    String newName = getStringInput("New Name: ");
+                    if(selectedTaskManager.checkTaskName(newName))
+                    {
+                        selectedTask.setTaskName(newName);
+                    }
+                    else
+                    {
+                        System.out.println("There is already this task name in this project. Please try again!!!");
+                    }
+                    projectPage();
+                    break;
+                case 2:
+                    String newDescription = getStringInput("New Description: ");
+                    selectedTask.setTaskDescription(newDescription);
+                    projectPage();
+                    break;
+                case 3:
+                    int newDuration = getIntegerInput("New Duration: ");
+                    selectedTask.setDuration(newDuration);
+                    Schedule.assignDate(selectedProject);
+                    projectPage();
+                    break;
+            }
+        }while(choice!=4);
+        projectPage();
     }
 
 
     public static void main(String[] args) throws ParseException {
+        System.out.println("=========================================");
         System.out.println("Welcome to Project Scheduling Application");
+        System.out.println("=========================================");
         int choice;
         do{
                 System.out.println("1. Create New Project");
@@ -374,13 +437,17 @@ public class ProjectSchedulingApplication {
                 choice = getIntegerInput("Enter: ");
                 switch (choice) {
                     case 1:
-                        System.out.println(" Create New Project");
+                        System.out.println("\n=========================================");
+                        System.out.println("\t\t\tCreate New Project");
+                        System.out.println("=========================================");
                         selectedProject = createNewProject();
                         selectedTaskManager = selectedProject.getTaskManager();
                         projectPage();
                         break;
                     case 2:
-                        System.out.println("Load Project");
+                        System.out.println("\n=========================================");
+                        System.out.println("\t\t\tLoad Project");
+                        System.out.println("=========================================");
                         try {
                             loadProject();
                         } catch (IOException e) {

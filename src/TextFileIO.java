@@ -3,6 +3,7 @@ import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -131,7 +132,7 @@ public class TextFileIO {
      * @param fileName, a file that want to load/read
      * @return Project, project instance.
      * */
-    public Project readProjectFile(String fileName) throws ParseException
+    public Project readProjectFile(String fileName)
     {
         ArrayList<String> projectData = new ArrayList<>();          /* Array list to store project data*/
         ArrayList<ArrayList<String>> taskData = new ArrayList<ArrayList<String>>(); /* ArrayList of ArrayList to store multiple tasks and their data*/
@@ -163,7 +164,7 @@ public class TextFileIO {
                     dependencyData.get(dependencyCount).add(lineData);
                     break;
                 default:
-                    System.out.println("ERROR on reading");
+                    System.out.println("ERROR : on reading");
                     break;
             }
         }
@@ -206,21 +207,20 @@ public class TextFileIO {
      * @return true, if succeed
      *       false, if fail
      * */
-    public boolean deleteProjectFile(Project project) throws IOException {
+    public boolean deleteProjectFile(Project project) {
+        close();
         Path currentPath = FileSystems.getDefault().getPath("").toAbsolutePath();
+        System.out.println(currentPath);
+        File here = new File(".");
+        System.out.println(here.getAbsolutePath());
         try{
-            File file = new File(currentPath+project.getName()+".txt");
-            if(file.delete())
-            {
-                System.out.println("File "+project.getName()+" has been deleted successfully");
-            }
-            else
-            {
-                System.out.println("Failed to delete the file ' "+project.getName()+" '");
-                return false;
-            }
+            File file = new File(here.getAbsolutePath()+project.getName()+".txt");
+//            File file = new File(currentPath+project.getName()+".txt");
+            file.delete();
+            System.out.println("Succesfully delete");
         }catch (Exception e){
             e.printStackTrace();
+            System.out.println("ERROR CAn't delete");
             return false;
         }
         return true;

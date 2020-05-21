@@ -132,7 +132,6 @@ public class Project {
      * such as  name, description, start date and end date
      * */
     public void showProjectInformation(){
-        System.out.println("--------------------------------");
         System.out.println("Project name: "+projectName);
         System.out.println("Project description: "+projectDesc);
         System.out.println("Start date: "+ DateFormatter.formatDateToStringForDisplay(startDate));
@@ -144,7 +143,6 @@ public class Project {
         {
             System.out.println("End date: -");
         }
-        System.out.println("--------------------------------");
     }
     /**
      * getGanttChart()
