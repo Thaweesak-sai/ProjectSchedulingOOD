@@ -5,6 +5,7 @@ import java.util.ArrayList;
  * A class represent a task of project
  *
  *   Created by Jednipit Tantaletong (Pleum) 60070503411
+ *              Thaweesak Saiwongse (Note) 60070503429
  */
 public class Task {
     /** task name */

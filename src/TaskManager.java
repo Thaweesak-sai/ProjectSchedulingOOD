@@ -5,6 +5,7 @@ import java.util.List;
  * A class to keep all list of the project and handle things related to task
  *
  *   Created by Jednipit Tantaletong (Pleum) 60070503411
+ *              Thaweesak Saiwongse (Note) 60070503429
  */
 public class TaskManager
 {

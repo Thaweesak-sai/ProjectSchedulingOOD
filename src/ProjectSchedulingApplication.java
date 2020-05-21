@@ -286,11 +286,9 @@ public class ProjectSchedulingApplication {
             case 9:
                 try
                 {
-                    if(projectManager.save(selectedProject))
-                    {
-                        System.out.println("Successfully saved");
-                        System.out.println("Exiting...");
-                    }
+                    projectManager.save(selectedProject);
+                    System.out.println("Successfully saved");
+                    System.out.println("Exiting...");
                 }
                 catch (IOException e)
                 {

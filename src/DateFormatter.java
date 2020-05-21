@@ -9,6 +9,7 @@ import java.util.Locale;
  * A class using for formatting date and string
  *
  *   Created by Jednipit Tantaletong (Pleum) 60070503411
+ *              Thaweesa Saiwongse (Note) 60070503429
  */
 public class DateFormatter
 {

@@ -2,6 +2,7 @@
  *  A class represent dependency of the two tasks
  *
  *   Created by Jednipit Tantaletong (Pleum) 60070503411
+ *              Thaweesak Saiwongse (Note) 60070503429
  */
 public class Dependency
 {

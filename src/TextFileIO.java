@@ -9,11 +9,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ *  TextFileIO Class
+ * A class to manage writing/reading text file.
+ *
+ * Created by   Jednipit Tantaletong (Pleum) 60070503411
+ *              Thaweesak Saiwongse (Note)   60070503429
+ *              16/05/2020
+ * */
+
 public class TextFileIO {
+
+    /** Reader object to access the file */
     private BufferedReader reader = null;
 
+    /** openProjectFile method
+     *  A method to open the project file to read/write
+     * @param fileName is project's file name
+     * */
     public void openProjectFile(String fileName){
-        boolean bOk = true;
         try
         {
             if (reader != null)
@@ -29,10 +43,15 @@ public class TextFileIO {
         }
         catch (FileNotFoundException fnf)
         {
-            bOk = false;
             reader = null;
         }
     }
+    /**
+     *  getNextLine
+     *  A method to read a line from open file.
+     * @return lineRead, return line as a string, next line is nothing or error occurred.
+     * Created By Sally Goldin, 21 March 2012, modified by Thaweesak Saiwongse 16/05/2020
+     * */
     public String getNextLine(){
         String lineRead = null;
         try
@@ -52,6 +71,12 @@ public class TextFileIO {
         }
         return lineRead;
     }
+
+    /**
+     * Close
+     * A method to close the opened file.
+     *
+     */
     public void close(){
         try
         {
@@ -63,7 +88,14 @@ public class TextFileIO {
         }
     }
 
-    public boolean writeProjectFile(Project project) throws IOException {
+    /**
+     * writeProjectFile
+     * A method to store project's data as a text file.
+     * @param project, the project the user selected to save as a text file.
+     *
+     *
+     * */
+    public void writeProjectFile(Project project) throws IOException {
         PrintWriter writer = new PrintWriter(new FileOutputStream(project.getName() + ".txt", Boolean.parseBoolean(String.valueOf(StandardCharsets.UTF_8))),false);
         writer.println("project|" + project.getName());
         writer.println("project|" + project.getDesc());
@@ -91,13 +123,19 @@ public class TextFileIO {
             }
         }
         writer.close();
-        return true;
     }
 
-    public Project readProjectFile(String fileName) throws ParseException {
-        ArrayList<String> projectData = new ArrayList<>();
-        ArrayList<ArrayList<String>> taskData = new ArrayList<ArrayList<String>>();
-        ArrayList<ArrayList<String>> dependencyData = new ArrayList<ArrayList<String>>();
+    /**
+     *  readProjectFile
+     *  A method to read text file and create all project objects.
+     * @param fileName, a file that want to load/read
+     * @return Project, project instance.
+     * */
+    public Project readProjectFile(String fileName) throws ParseException
+    {
+        ArrayList<String> projectData = new ArrayList<>();          /* Array list to store project data*/
+        ArrayList<ArrayList<String>> taskData = new ArrayList<ArrayList<String>>(); /* ArrayList of ArrayList to store multiple tasks and their data*/
+        ArrayList<ArrayList<String>> dependencyData = new ArrayList<ArrayList<String>>();   /*ArrayList of ArrayList to store multiple dependencies and their data*/
         int taskCount=0;
         int dependencyCount=0;
         openProjectFile(fileName);
@@ -129,8 +167,10 @@ public class TextFileIO {
                     break;
             }
         }
+        /* Create Project object*/
         Project loadedProject = new Project(projectData.get(0),projectData.get(1),
                 DateFormatter.formatStringToDate(projectData.get(2)));
+        /* if the project already has ended Date*/
         if(projectData.size()==4) {
             loadedProject.setEndDate(DateFormatter.formatStringToDate(projectData.get(3)));
         }
@@ -139,12 +179,15 @@ public class TextFileIO {
         for(int i=0;i<taskCount;i++)
         {
             Task loadedTask = new Task(taskData.get(i).get(0),taskData.get(i).get(1),Integer.parseInt(taskData.get(i).get(2)));
+            /* if has start date*/
             if(taskData.get(i).size()>=4)
                 loadedTask.setStartDate(DateFormatter.formatStringToDate(taskData.get(i).get(3)));
+            /* if has end date*/
             if(taskData.get(i).size()>=5)
                 loadedTask.setEndDate(DateFormatter.formatStringToDate(taskData.get(i).get(4)));
             loadedProjectTaskManager.addTask(loadedTask);
         }
+        /*load dependency*/
         for(int j=0;j<dependencyCount;j++)
         {
             Task preDecessorTask = loadedProjectTaskManager.getTask(dependencyData.get(j).get(0));
@@ -156,7 +199,13 @@ public class TextFileIO {
         close();
         return loadedProject;
     }
-
+    /**
+     * deleteProjectFile
+     * A method to delect project file
+     * @param project, the project wanted to delete
+     * @return true, if succeed
+     *       false, if fail
+     * */
     public boolean deleteProjectFile(Project project) throws IOException {
         Path currentPath = FileSystems.getDefault().getPath("").toAbsolutePath();
         try{
@@ -176,7 +225,11 @@ public class TextFileIO {
         }
         return true;
     }
-
+    /**
+     * getAllFileName
+     * A method to read all text file name in the directory
+     * @return allFileName, string of all file names.
+     * */
     public String getAllFileName(){
         Path currentPath = FileSystems.getDefault().getPath("").toAbsolutePath();
         System.out.println("Searching all files in " + currentPath + " ....");
