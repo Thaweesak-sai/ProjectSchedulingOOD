@@ -1,4 +1,8 @@
-
+/**
+ *
+ *
+ *
+ * */
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -56,7 +60,8 @@ public class GanttChart {
         }
         table = new JTable(data,column);
         table.setBounds(30,40,200,300);
-        JScrollPane sp = new JScrollPane(table);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        JScrollPane sp = new JScrollPane(table,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         frame.add(sp);
         frame.setSize(500,200);
         frame.setVisible(true);
