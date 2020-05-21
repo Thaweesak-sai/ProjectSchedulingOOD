@@ -1,13 +1,18 @@
-import java.text.ParseException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
+
+/**
+ * a class for scheduling the project date and check cycle of the project tasks
+ */
 public class Schedule {
 
+    /**
+     * Assign the start and end date to all tasks of the projects according to the dependencies
+     * @param project Project to schedule
+     */
     public static void assignDate(Project project)
     {
         TaskManager taskManager = project.getTaskManager();
@@ -23,6 +28,11 @@ public class Schedule {
         project.setEndDate(taskManager.getEndMilestone().getEndDate());
     }
 
+    /**
+     * Iterate through all taks in the project by using the dependencies of each task as a guide
+     * @param task current task
+     * @param preDecessorTask predecessor of the current task
+     */
     public static void iterateAssignDate(Task task, Task preDecessorTask)
     {
         List<Dependency> dependencies = task.getDependencyList();
@@ -84,6 +94,12 @@ public class Schedule {
 //        }
 //    }
 
+    /**
+     * Compare two dates and return the latest one
+     * @param firstDate date to compare
+     * @param secondDate another date to compare
+     * @return the latest date
+     */
     private static LocalDate getLatestDate(LocalDate firstDate, LocalDate secondDate)
     {
         int result = firstDate.compareTo(secondDate);
@@ -117,6 +133,12 @@ public class Schedule {
 //        return calendar.getTime();
 //    }
 
+    /**
+     * Calculate the ending date of the task by skipping the weekends
+     * @param date starting date of the task
+     * @param duration duration to finish the task
+     * @return ending date which is date after add the duration
+     */
     public static LocalDate addDaysSkippingWeekends(LocalDate date, int duration) {
         LocalDate result = date;
         int addedDays = 0;
@@ -142,7 +164,13 @@ public class Schedule {
 //        return true;
 //    }
 
-
+    /**
+     * Validate that the dependency that is going to add will create cycle in the project or not
+     * @param taskManager task manager of the project
+     * @param preDecessorTask predecessor task
+     * @param successorTask successor task
+     * @return true if it has cycle otherwise false
+     */
     public static boolean hasCycle(TaskManager taskManager,Task preDecessorTask, Task successorTask)
     {
         List<Task> alreadyVisitedTask = new ArrayList<Task>();
@@ -162,7 +190,12 @@ public class Schedule {
         return false;
     }
 
-
+    /**
+     * Iterate through the project task to detect cycle
+     * @param task current task of iteration
+     * @param alreadyVisitedTask list of tasks that is already visited
+     * @return true if it found that the task has already visited otherwise false
+     */
     public static boolean iterateCycle(Task task,List<Task> alreadyVisitedTask)
     {
         List<Dependency> dependencies = task.getDependencyList();

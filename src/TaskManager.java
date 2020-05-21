@@ -1,10 +1,19 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class to keep all list of the project and handle things related to task
+ *
+ *   Created by Jednipit Tantaletong (Pleum) 60070503411
+ */
 public class TaskManager
 {
+    /** list of all tasks in project*/
     private List<Task> taskList;
 
+    /**
+     * Constructor for creating task manager which also initialize start and end mile stone
+     */
     public TaskManager()
     {
         this.taskList = new ArrayList<Task>();
@@ -12,27 +21,43 @@ public class TaskManager
         taskList.add(new Milestone("End","Ending Task"));
     }
 
-
+    /**
+     * Get start milestone
+     * @return start milestone
+     */
     public Task getStartMilestone()
     {
         return taskList.get(0);
     }
 
+    /**
+     * Get end milestone
+     * @return end milestone
+     */
     public Task getEndMilestone()
     {
         return taskList.get(1);
     }
 
-    public boolean addTask(Task task)
+    /**
+     * Add task to the task list,
+     * Also add dependency to connect start milestone and end milestone to this task
+     * @param task task to add to task list
+     */
+    public void addTask(Task task)
     {
         Task startMilestone = getStartMilestone();
         startMilestone.addDependency(startMilestone,task);
         task.addDependency(task,getEndMilestone());
         taskList.add(task);
-        return true;
 
     }
 
+    /**
+     * Check the new task name with all tasks in the list
+     * @param taskName task name that user input
+     * @return true if the task name isn't duplicated otherwise false
+     */
     public boolean checkTaskName(String taskName)
     {
         for(Task checkTask : taskList)
@@ -46,6 +71,11 @@ public class TaskManager
     }
 
 
+    /**
+     * Get task from the task list
+     * @param taskName task name
+     * @return task that match with the task name that user enter otherwise return null
+     */
     public Task getTask(String taskName)
     {
         List<Task> allTask = getAllTask();
@@ -59,7 +89,12 @@ public class TaskManager
         return null;
     }
 
-    public boolean deleteTask(Task deletedTask)
+    /**
+     * Delete the task ,
+     * also delete all the dependencies that are related to this task
+     * @param deletedTask task to delete
+     */
+    public void deleteTask(Task deletedTask)
     {
         List<Task> preDecessorList = getPreDecessorTask(deletedTask);
         for (Task task : preDecessorList)
@@ -71,11 +106,13 @@ public class TaskManager
         {
             removeDependency(deletedTask,task);
         }
-        System.out.println("test");
         getStartMilestone().removeDependency(deletedTask);
-        return taskList.remove(deletedTask);
+        taskList.remove(deletedTask);
     }
 
+    /**
+     * Show all task name in the list
+     */
     public void showAllTaskName()
     {
         System.out.println("All the tasks in this project");
@@ -86,6 +123,9 @@ public class TaskManager
         }
     }
 
+    /**
+     * Show all task infomration
+     */
     public void showAllTaskInformation()
     {
         List<Task> availableTask = getAllTask();
@@ -96,7 +136,10 @@ public class TaskManager
     }
 
 
-
+    /**
+     * Get all the task except start and end milestones
+     * @return all the task except start and end milestones
+     */
     public List<Task> getAllTask ()
     {
         List<Task> availableTask = new ArrayList<Task>(taskList);
@@ -104,6 +147,10 @@ public class TaskManager
         return availableTask;
     }
 
+    /**
+     * Check if task list is empty or not
+     * @return true if the task list is empty otherwise false
+     */
     public boolean isTaskListEmpty(){
 
         if(getAllTask().size() == 0){
@@ -112,6 +159,11 @@ public class TaskManager
         return false;
     }
 
+    /**
+     *  Get available task which remove itself and start and end milestone
+     * @param selectedTask selected task
+     * @return list of task
+     */
     private List<Task> getAvailableTask (Task selectedTask)
     {
         List<Task> availableTask = new ArrayList<Task>(taskList);
@@ -130,6 +182,12 @@ public class TaskManager
         return availableTask;
     }
 
+
+    /**
+     * Get list of predecessor task of selected task
+     * @param selectedTask selected task
+     * @return list of predecessor task of selected task
+     */
     private List<Task> getPreDecessorTask (Task selectedTask)
     {
         List<Task> availableTask = getAvailableTask(selectedTask);
@@ -148,6 +206,11 @@ public class TaskManager
         return preDecessorList;
     }
 
+    /**
+     * Get list of successor task of selected task
+     * @param selectedTask selected task
+     * @return list of successor task of selected task
+     */
     private List<Task> getSuccessorTask(Task selectedTask)
     {
         List<Dependency> dependencyList = selectedTask.getDependencyList();
@@ -159,7 +222,10 @@ public class TaskManager
         return successorTaskList;
     }
 
-
+    /**
+     * Show all predecessor tasks of selected task
+     * @param selectedTask selected task
+     */
     private void showPreDecessorTask(Task selectedTask)
     {
         List<Task> preDecessorList = getPreDecessorTask(selectedTask);
@@ -178,6 +244,10 @@ public class TaskManager
         }
     }
 
+    /**
+     * Show all successor tasks of selected task
+     * @param selectedTask selected task
+     */
     private void showSuccessorTask(Task selectedTask)
     {
         List<Task> successorTaskList = getSuccessorTask(selectedTask);
@@ -196,8 +266,14 @@ public class TaskManager
         }
     }
 
-
-
+    /**
+     * Add dependency of the task. The dependency will keep at dependency list of predecessor task
+     * Also checking if the dependency is already exist or not,
+     * and manage dependency of start and end milestones with related tasks
+     * @param preDecessorTask predecessor task
+     * @param successorTask successor task
+     * @return true if successfully add dependency otherwise false
+     */
     public boolean addDependency(Task preDecessorTask, Task successorTask)
     {
         List<Dependency> checkList = preDecessorTask.getDependencyList();
@@ -216,6 +292,14 @@ public class TaskManager
     }
 
 
+    /**
+     * Remove dependency of the task.
+     * Also checking if the dependency that want to delete is exist or not,
+     * and manage dependency of start and end milestones with related tasks
+     * @param preDecessorTask predecessor task
+     * @param successorTask successor task
+     * @return true if successfully remove dependency otherwise false
+     */
     public boolean removeDependency(Task preDecessorTask, Task successorTask)
     {
         List<Dependency> checkList = preDecessorTask.getDependencyList();
@@ -239,24 +323,10 @@ public class TaskManager
     }
 
 
-    public boolean showAllTaskDependency (Task selectedTask)
-    {
-        List<Task> availableTask = getAvailableDependencyTask(selectedTask);
-        if(availableTask.size() > 0)
-        {
-            for (Task task : availableTask)
-            {
-                System.out.println("Task: " + task.getTaskName());
-            }
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    }
-
+    /**
+     * Show detail of the task
+     * @param task task to show detail
+     */
     public void showTaskInformation(Task task)
     {
         System.out.println("--------------------------------");
@@ -286,8 +356,9 @@ public class TaskManager
     }
 
 
-
-
+    /**
+     * Reset the start and end date of all tasks in list
+     */
     public void resetDate()
     {
         for(Task task : taskList)

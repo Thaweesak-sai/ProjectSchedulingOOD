@@ -1,5 +1,5 @@
 import java.time.LocalDate;
-import java.util.Date;
+
 
 public class Project {
     private TaskManager taskManager;
@@ -17,32 +17,41 @@ public class Project {
         this.taskManager = new TaskManager();
     }
 
-    public TaskManager getTaskManager() {
+    public TaskManager getTaskManager()
+    {
         return taskManager;
     }
 
-    public String getName(){
+    public String getName()
+    {
         return this.projectName;
     }
-    public void setName(String name){
+    public void setName(String name)
+    {
         this.projectName = name;
     }
-    public String getDesc(){
+    public String getDesc()
+    {
         return this.projectDesc;
     }
-    public void setDesc(String description){
+    public void setDesc(String description)
+    {
         this.projectDesc = description;
     }
-    public LocalDate getStartDate(){
+    public LocalDate getStartDate()
+    {
         return this.startDate;
     }
-    public void setStartDate(LocalDate startDate){
+    public void setStartDate(LocalDate startDate)
+    {
         this.startDate = startDate;
     }
-    public LocalDate getEndDate(){
+    public LocalDate getEndDate()
+    {
         return this.endDate;
     }
-    public void setEndDate(LocalDate endDate){
+    public void setEndDate(LocalDate endDate)
+    {
         this.endDate = endDate;
     }
 
@@ -74,6 +83,7 @@ public class Project {
         }
         System.out.println("--------------------------------");
     }
+
     public void getGanttChart(){
         GanttChart ganttChart = new GanttChart(this);
         ganttChart.getGanttChart();

@@ -13,13 +13,19 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class ProjectSchedulingApplication {
+    /** Scanner to receive input from user*/
     private static Scanner scanner = new Scanner(System.in);
+    /** task manager of the current project*/
     private static TaskManager selectedTaskManager;
+    /** Project manager instance */
     private static ProjectManager projectManager = ProjectManager.getInstance();
+    /** current porject that user selected*/
     private static Project selectedProject;
+    /** current task that user selected */
     private static Task selectedTask;
 
 
+    
     private static String getStringInput(String label)
     {
         String input;
