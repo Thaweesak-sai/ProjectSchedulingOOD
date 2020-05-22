@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * ProjectManager Class
@@ -39,17 +38,14 @@ public class ProjectManager {
      * addProject
      * A method to add project to list
      * @param project , project
-     * @return true, if succeeds
-     * @return false, if fails
+     *
      * */
-    public Boolean addProject(Project project)
+    public void addProject(Project project)
     {
             if(!projectList.add(project))
             {
                 System.out.println("ERROR : Fail to add project to a list");
-                return false;
             }
-        return true;
     }
 
     /**
@@ -67,25 +63,18 @@ public class ProjectManager {
      * printAllProject
      * A method to print all project name in the directory
      * */
-    public void printAllProject() throws IOException
+    public String[] getAllProjectName()
     {
         String stringReturned = textFileIO.getAllFileName();
-        String[] allFileName = stringReturned.split("\\|");
-        for (String s : allFileName)
+        System.out.println(stringReturned);
+        String[] splitedString = stringReturned.split("\\|");
+        for(int i=0;i<splitedString.length;i++ )
         {
-            System.out.println(s);
+            System.out.println(splitedString[i]);
         }
+        return splitedString;
+    }
 
-    }
-    /**
-     * deleteProject
-     * A method to delete project
-     * @param project project to delete
-     * */
-    public Boolean deleteProject(Project project) throws IOException
-    {
-        return textFileIO.deleteProjectFile(project);
-    }
     /**
      * getProject
      * A method to get the seleected project instance

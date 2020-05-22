@@ -1,15 +1,8 @@
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.format.FormatStyle;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class ProjectSchedulingApplication {
@@ -129,10 +122,22 @@ public class ProjectSchedulingApplication {
         return newProject;
     }
 
-    private static boolean loadProject() throws IOException, ParseException
+    private static void loadProject() throws ParseException
     {
-        projectManager.printAllProject();
-        String projectName = getStringInput("Project name to load:  ");
+        String[] allFilesName = projectManager.getAllProjectName();
+        String projectName;
+        boolean fileFounded = false;
+        do {
+            projectName = getStringInput("Project name to load (Exclude .txt):  ");
+            for (int i = 0; i < allFilesName.length; i++) {
+                if (allFilesName[i].equals(projectName)) {
+                    fileFounded = true;
+                    break;
+                }
+            }
+            if(!fileFounded)
+                System.out.println("Can't find the project you enter! TRY AGAIN!");
+        } while (!fileFounded);
         projectManager.loadProject(projectName+".txt");
         selectedProject = projectManager.getProject(projectName);
         selectedTaskManager = selectedProject.getTaskManager();
@@ -140,8 +145,7 @@ public class ProjectSchedulingApplication {
         selectedTaskManager.showAllTaskName();
         selectedTaskManager.showAllTaskInformation();
         projectPage();
-        return true;
-    } 
+    }
 
 
     private static void projectPage()
@@ -157,9 +161,8 @@ public class ProjectSchedulingApplication {
         System.out.println("6. Remove Task Dependency");
         System.out.println("7. Print Schedule Report");
         System.out.println("8. Display Gantt Chart");
-        System.out.println("9. Delete Project");
-        System.out.println("10. Discard changes");
-        System.out.println("11. Save & Exit");
+        System.out.println("9. Discard changes");
+        System.out.println("10. Save & Exit");
         int choice = getIntegerInput("Enter: ");
         switch (choice)
         {
@@ -313,31 +316,6 @@ public class ProjectSchedulingApplication {
             case 9:
                 while(true)
                 {
-                    String confirm = getStringInput("Are you sure to delete? (Y/N) :  ");
-                    if (confirm.equals("Y"))
-                    {
-                        try {
-                            projectManager.deleteProject(selectedProject);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        System.out.println("Returning to home page...");
-                        break;
-                    }
-                    else if (confirm.equals("N"))
-                    {
-                        projectPage();
-                        break;
-                    }
-                    else
-                    {
-                        System.out.println("Please input only 'Y' or 'N'");
-                    }
-                }
-                break;
-            case 10:
-                while(true)
-                {
                     String confirm = getStringInput("Are you sure to discard? (Y/N) :  ");
                     if (confirm.equals("Y"))
                     {
@@ -356,7 +334,7 @@ public class ProjectSchedulingApplication {
                     }
                 }
                 break;
-            case 11:
+            case 10:
                 try
                 {
                     projectManager.save(selectedProject);
@@ -469,11 +447,7 @@ public class ProjectSchedulingApplication {
                         System.out.println("\n=========================================");
                         System.out.println("\t\t\tLoad Project");
                         System.out.println("=========================================");
-                        try {
-                            loadProject();
-                        } catch (IOException e) {
-                            System.out.println("Error: Can't load the project file");
-                        }
+                        loadProject();
                         break;
                     case 3:
                         System.out.println("Exiting Program...");
