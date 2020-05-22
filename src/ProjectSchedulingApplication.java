@@ -162,34 +162,42 @@ public class ProjectSchedulingApplication
     private static void loadProject() throws ParseException
     {
         String[] allFilesName = projectManager.getAllProjectName();
-        String[] projectName = new String[2];
-        boolean fileFounded = false;
-        do {
-            String input = getStringInput("Project name to load :  ");
-            if(input.endsWith(".txt"))
-            {
-                projectName = input.split(".txt");
-            }
-            else
-            {
-                projectName[0] = input;
-            }
-            for (int i = 0; i < allFilesName.length; i++) {
-                if (allFilesName[i].equals(projectName[0]+".txt")) {
-                    fileFounded = true;
-                    break;
+        if(allFilesName==null)
+        {
+            System.out.println("There is no text file in the directory!!");
+        }
+        else
+        {
+            String[] projectName = new String[2];
+            boolean fileFounded = false;
+            do {
+                String input = getStringInput("Project name to load :  ");
+                if(input.endsWith(".txt"))
+                {
+                    projectName = input.split(".txt");
                 }
-            }
-            if(!fileFounded)
-                System.out.println("Can't find the project you enter! TRY AGAIN!");
-        } while (!fileFounded);
-        projectManager.loadProject(projectName[0]+".txt");
-        selectedProject = projectManager.getProject(projectName[0]);
-        selectedTaskManager = selectedProject.getTaskManager();
-        selectedProject.showProjectInformation();
-        selectedTaskManager.showAllTaskName();
-        selectedTaskManager.showAllTaskInformation();
-        projectPage();
+                else
+                {
+                    projectName[0] = input;
+                }
+                for (int i = 0; i < allFilesName.length; i++) {
+                    if (allFilesName[i].equals(projectName[0]+".txt")) {
+                        fileFounded = true;
+                        break;
+                    }
+                }
+                if(!fileFounded)
+                    System.out.println("Can't find the project you enter! TRY AGAIN!");
+            } while (!fileFounded);
+            projectManager.loadProject(projectName[0]+".txt");
+            selectedProject = projectManager.getProject(projectName[0]);
+            selectedTaskManager = selectedProject.getTaskManager();
+            selectedProject.showProjectInformation();
+            selectedTaskManager.showAllTaskName();
+            selectedTaskManager.showAllTaskInformation();
+            projectPage();
+        }
+
     }
 
 

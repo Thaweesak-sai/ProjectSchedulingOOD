@@ -224,16 +224,20 @@ public class TextFileIO
         System.out.println("Searching all files in " + currentPath + " ....");
         File folder = new File(String.valueOf(currentPath));
         File[] projectFileList = folder.listFiles((file, name) -> name.endsWith(".txt"));
+        String allFileName;
         if(projectFileList==null)
         {
-            return "Project file can't be found in "+currentPath;
+            return null;
         }
-        String allFileName = projectFileList[0].getName();
-        allFileName = allFileName.concat("|");
-        for (int i =1;i<projectFileList.length;i++)
+        else
         {
-            allFileName = allFileName.concat(projectFileList[i].getName());
+            allFileName = projectFileList[0].getName();
             allFileName = allFileName.concat("|");
+            for (int i =1;i<projectFileList.length;i++)
+            {
+                allFileName = allFileName.concat(projectFileList[i].getName());
+                allFileName = allFileName.concat("|");
+            }
         }
         return allFileName;
     }

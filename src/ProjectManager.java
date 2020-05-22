@@ -78,7 +78,10 @@ public class ProjectManager
     public String[] getAllProjectName()
     {
         String stringReturned = textFileIO.getAllFileName();
-        System.out.println(stringReturned);
+        if(stringReturned==null)
+        {
+            return null;
+        }
         String[] splitedString = stringReturned.split("\\|");
         for(int i=0;i<splitedString.length;i++ )
         {
