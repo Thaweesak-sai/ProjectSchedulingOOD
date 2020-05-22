@@ -6,6 +6,10 @@ import java.util.List;
 
 /**
  * a class for scheduling the project date and check cycle of the project tasks
+ *
+ *   Created by Jednipit Tantaletong (Pleum) 60070503411
+ *              Thaweesak Saiwongse (Note) 60070503429
+ *              29/04/2020
  */
 public class Schedule {
 
@@ -16,20 +20,18 @@ public class Schedule {
     public static void assignDate(Project project)
     {
         TaskManager taskManager = project.getTaskManager();
-        taskManager.resetDate();
+        taskManager.resetDate(); //reset all start and end date of all tasks
         taskManager.getStartMilestone().setStartDate(project.getStartDate());
-        for(Dependency dependency : taskManager.getStartMilestone().getDependencyList())
+        for(Dependency dependency : taskManager.getStartMilestone().getDependencyList()) // get start milestone and start iterate through network
         {
-//            System.out.print("START --> ");
-            iterateAssignDate(dependency.getSuccessorTask(),taskManager.getStartMilestone());
-//            System.out.println("END");
-//            System.out.println();
+            iterateAssignDate(dependency.getSuccessorTask(),taskManager.getStartMilestone()); // iterate
         }
         project.setEndDate(taskManager.getEndMilestone().getEndDate());
     }
 
     /**
-     * Iterate through all taks in the project by using the dependencies of each task as a guide
+     * Iterate through all tasks in the project by using the dependencies of each task as a guide
+     * Recursive method
      * @param task current task
      * @param preDecessorTask predecessor of the current task
      */
@@ -44,7 +46,7 @@ public class Schedule {
             }
             else
             {
-                LocalDate newStartDate = addDaysSkippingWeekends(preDecessorTask.getEndDate(),1);
+                LocalDate newStartDate = addDaysSkippingWeekends(preDecessorTask.getEndDate(),1); // find the start date of the task
                 if(task.getStartDate() != null)
                 {
                     LocalDate latestDate = getLatestDate(task.getStartDate(),newStartDate);
@@ -55,15 +57,13 @@ public class Schedule {
                     task.setStartDate(newStartDate);
                 }
             }
-            task.setEndDate(addDaysSkippingWeekends(task.getStartDate(),task.getDuration() - 1 ));
-//            System.out.print("Task " + task.getTaskName());
-            if(dependency.getSuccessorTask() != null)
+            task.setEndDate(addDaysSkippingWeekends(task.getStartDate(),task.getDuration() - 1 )); // find end date
+            if(dependency.getSuccessorTask() != null) // if task have successor task, continue to iterate
             {
-//                System.out.print(" --> ");
                 iterateAssignDate(dependency.getSuccessorTask(),task);
             }
         }
-        if(task instanceof Milestone)
+        if(task instanceof Milestone) // set end milestone end date
         {
             if(task.getEndDate() != null)
             {
@@ -77,22 +77,6 @@ public class Schedule {
         }
     }
 
-//    private static Date getLatestDate(Date firstDate, Date secondDate)
-//    {
-//        Calendar firstDateCalendar = Calendar.getInstance();
-//        Calendar secondDateCalendar = Calendar.getInstance();
-//        firstDateCalendar.setTime(firstDate);
-//        secondDateCalendar.setTime(secondDate);
-//        int result = firstDateCalendar.compareTo(secondDateCalendar);
-//        if(result >= 0)
-//        {
-//            return firstDate;
-//        }
-//        else
-//        {
-//            return secondDate;
-//        }
-//    }
 
     /**
      * Compare two dates and return the latest one
@@ -114,25 +98,6 @@ public class Schedule {
     }
 
 
-//    public static Date incrementDaysExcludingWeekends(Date startDate, int duration)
-//    {
-//        Calendar calendar = Calendar.getInstance();
-//        // format of date is passed as an argument
-//        // base date which will be incremented
-//        // set calendar time with given date
-//        calendar.setTime(startDate);
-//        // add days to date
-//        calendar.add(Calendar.DAY_OF_WEEK, duration-1);
-//        // check if the date after addition is a working day.
-//        // If not then keep on incrementing it till it is a working day
-//        while(!isWorkingDay(calendar.getTime(), calendar))
-//        {
-//            calendar.add(Calendar.DAY_OF_WEEK, 1);
-//        }
-////        simpleDateFormat.format(calendar.getTime());
-//        return calendar.getTime();
-//    }
-
     /**
      * Calculate the ending date of the task by skipping the weekends
      * @param date starting date of the task
@@ -151,19 +116,6 @@ public class Schedule {
         return result;
     }
 
-//    private static  boolean isWorkingDay(Date date, Calendar calendar)
-//    {
-//        // set calendar time with given date
-//        calendar.setTime(date);
-//        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-//        // check if it is Saturday(day=7) or Sunday(day=1)
-//        if ((dayOfWeek == 7) || (dayOfWeek == 1))
-//        {
-//            return false;
-//        }
-//        return true;
-//    }
-
     /**
      * Validate that the dependency that is going to add will create cycle in the project or not
      * @param taskManager task manager of the project
@@ -174,11 +126,11 @@ public class Schedule {
     public static boolean hasCycle(TaskManager taskManager,Task preDecessorTask, Task successorTask)
     {
         List<Task> alreadyVisitedTask = new ArrayList<Task>();
-        preDecessorTask.addDependency(preDecessorTask,successorTask);
-        preDecessorTask.removeDependency(taskManager.getEndMilestone());
+        preDecessorTask.addDependency(preDecessorTask,successorTask); // try to add dependency
+        preDecessorTask.removeDependency(taskManager.getEndMilestone()); // remove dependency from end milestone
         for(Dependency dependency : taskManager.getStartMilestone().getDependencyList())
         {
-            if(iterateCycle(dependency.getSuccessorTask(),alreadyVisitedTask))
+            if(iterateCycle(dependency.getSuccessorTask(),alreadyVisitedTask)) // iterate through all tasks
             {
                 preDecessorTask.removeDependency(successorTask);
                 preDecessorTask.addDependency(preDecessorTask,taskManager.getEndMilestone());
@@ -195,7 +147,8 @@ public class Schedule {
     }
 
     /**
-     * Iterate through the project task to detect cycle
+     * Iterate through all project tasks to detect cycle
+     * Recursive method
      * @param task current task of iteration
      * @param alreadyVisitedTask list of tasks that is already visited
      * @return true if it found that the task has already visited otherwise false
@@ -203,12 +156,7 @@ public class Schedule {
     public static boolean iterateCycle(Task task,List<Task> alreadyVisitedTask)
     {
         List<Dependency> dependencies = task.getDependencyList();
-//        for(Task task1: alreadyVisitedTask){
-//            System.out.print(task1.getTaskName());
-//        }
-//        System.out.println();
-//        System.out.println("task to add: "+ task.getTaskName());
-        if(alreadyVisitedTask.contains(task))
+        if(alreadyVisitedTask.contains(task)) // check if we already visited this task or not
         {
             return true;
         }
@@ -217,16 +165,14 @@ public class Schedule {
             alreadyVisitedTask.add(task);
             for(Dependency dependency : dependencies)
             {
-//                System.out.println("In " + task.getTaskName());
-//                System.out.println("Pre: " + dependency.getPreDecessorTask().getTaskName());
-//                System.out.println("Suc: " + dependency.getSuccessorTask().getTaskName());
                 if(dependency.getSuccessorTask() != null )
                 {
-                    if(dependency.getSuccessorTask() instanceof Milestone){
+                    if(dependency.getSuccessorTask() instanceof Milestone) // clear visited task list if we reach the end milestone
+                    {
                         alreadyVisitedTask.clear();
                     }
 
-                    if(iterateCycle(dependency.getSuccessorTask(),alreadyVisitedTask))
+                    if(iterateCycle(dependency.getSuccessorTask(),alreadyVisitedTask)) // continue to iterate
                     {
                         return true;
                     }

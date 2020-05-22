@@ -19,7 +19,8 @@ import java.util.List;
  *              16/05/2020
  * */
 
-public class TextFileIO {
+public class TextFileIO
+{
 
     /** Reader object to access the file */
     private BufferedReader reader = null;
@@ -53,7 +54,8 @@ public class TextFileIO {
      * @return lineRead, return line as a string, next line is nothing or error occurred.
      * Created By Sally Goldin, 21 March 2012, modified by Thaweesak Saiwongse 16/05/2020
      * */
-    public String getNextLine(){
+    public String getNextLine()
+    {
         String lineRead = null;
         try
         {
@@ -78,7 +80,8 @@ public class TextFileIO {
      * A method to close the opened file.
      *
      */
-    public void close(){
+    public void close()
+    {
         try
         {
             reader.close();
@@ -96,13 +99,16 @@ public class TextFileIO {
      *
      *
      * */
-    public void writeProjectFile(Project project) throws IOException {
+    public void writeProjectFile(Project project) throws IOException
+    {
         PrintWriter writer = new PrintWriter(new FileOutputStream(project.getName() + ".txt", Boolean.parseBoolean(String.valueOf(StandardCharsets.UTF_8))),false);
         writer.println("project|" + project.getName());
         writer.println("project|" + project.getDesc());
         writer.println("project|" + DateFormatter.formatDateToStringForSaving(project.getStartDate()));
         if(project.getEndDate()!=null)
+        {
             writer.println("project|" + DateFormatter.formatDateToStringForSaving(project.getEndDate()));
+        }
         int numberOfTask = project.getTaskManager().getAllTask().size();
         List<Task> taskList = project.getTaskManager().getAllTask();
         for( int i=0;i < numberOfTask; i++)
@@ -112,9 +118,13 @@ public class TextFileIO {
             writer.println("task|" + taskList.get(i).getTaskDescription());
             writer.println("task|" + taskList.get(i).getDuration());
             if(taskList.get(i).getStartDate()!=null)
+            {
                 writer.println("task|" + DateFormatter.formatDateToStringForSaving(taskList.get(i).getStartDate()));
+            }
             if(taskList.get(i).getEndDate()!=null)
+            {
                 writer.println("task|" + DateFormatter.formatDateToStringForSaving(taskList.get(i).getEndDate()));
+            }
             writer.println("ENDTASK| ");
             for (int j = 0; j < taskDependency.size(); j++)
             {
@@ -141,11 +151,13 @@ public class TextFileIO {
         int dependencyCount=0;
         openProjectFile(fileName);
         String currentLine = null;
-        while((currentLine = getNextLine())!=null){
+        while((currentLine = getNextLine())!=null)
+        {
             String[] line = currentLine.split("\\|");
             String lineHeader = line[0];
             String lineData = line[1];
-            switch (lineHeader) {
+            switch (lineHeader)
+            {
                 case "project":
                     projectData.add(lineData);
                     break;
@@ -193,7 +205,8 @@ public class TextFileIO {
         {
             Task preDecessorTask = loadedProjectTaskManager.getTask(dependencyData.get(j).get(0));
             Task successorTask = loadedProjectTaskManager.getTask(dependencyData.get(j).get(1));
-            if(preDecessorTask != null && successorTask != null){
+            if(preDecessorTask != null && successorTask != null)
+            {
                 loadedProjectTaskManager.addDependency(preDecessorTask,successorTask);
             }
         }
@@ -207,18 +220,22 @@ public class TextFileIO {
      * @return true, if succeed
      *       false, if fail
      * */
-    public boolean deleteProjectFile(Project project) {
+    public boolean deleteProjectFile(Project project)
+    {
         close();
         Path currentPath = FileSystems.getDefault().getPath("").toAbsolutePath();
         System.out.println(currentPath);
         File here = new File(".");
         System.out.println(here.getAbsolutePath());
-        try{
+        try
+        {
             File file = new File(here.getAbsolutePath()+project.getName()+".txt");
 //            File file = new File(currentPath+project.getName()+".txt");
             file.delete();
             System.out.println("Succesfully delete");
-        }catch (Exception e){
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
             System.out.println("ERROR CAn't delete");
             return false;
@@ -230,7 +247,8 @@ public class TextFileIO {
      * A method to read all text file name in the directory
      * @return allFileName, string of all file names.
      * */
-    public String getAllFileName(){
+    public String getAllFileName()
+    {
         Path currentPath = FileSystems.getDefault().getPath("").toAbsolutePath();
         System.out.println("Searching all files in " + currentPath + " ....");
         File folder = new File(String.valueOf(currentPath));
@@ -241,7 +259,8 @@ public class TextFileIO {
         }
         String allFileName = projectFileList[0].getName();
         allFileName = allFileName.concat("|");
-        for (int i =1;i<projectFileList.length;i++) {
+        for (int i =1;i<projectFileList.length;i++)
+        {
             allFileName = allFileName.concat(projectFileList[i].getName());
             allFileName = allFileName.concat("|");
         }

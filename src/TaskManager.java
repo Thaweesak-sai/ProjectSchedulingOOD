@@ -6,6 +6,7 @@ import java.util.List;
  *
  *   Created by Jednipit Tantaletong (Pleum) 60070503411
  *              Thaweesak Saiwongse (Note) 60070503429
+ *              22/04/2020
  */
 public class TaskManager
 {
@@ -170,16 +171,6 @@ public class TaskManager
         List<Task> availableTask = new ArrayList<Task>(taskList);
         availableTask.remove(selectedTask);
         availableTask.removeIf(task -> task instanceof Milestone);
-        return availableTask;
-    }
-
-    private List<Task> getAvailableDependencyTask(Task selectedTask)
-    {
-        List<Task> availableTask = getAvailableTask(selectedTask);
-        for(Dependency dependency : selectedTask.getDependencyList())
-        {
-            availableTask.remove(dependency.getSuccessorTask());
-        }
         return availableTask;
     }
 

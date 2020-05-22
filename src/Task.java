@@ -6,6 +6,7 @@ import java.util.ArrayList;
  *
  *   Created by Jednipit Tantaletong (Pleum) 60070503411
  *              Thaweesak Saiwongse (Note) 60070503429
+ *              22/04/2020
  */
 public class Task {
     /** task name */
@@ -154,16 +155,4 @@ public class Task {
         dependencyList.removeIf(dependency -> dependency.getSuccessorTask() == successorTask);
     }
 
-    @Override
-    public String toString()
-    {
-        return "Task{" +
-                "taskName='" + taskName + '\'' +
-                ", taskDescription='" + taskDescription + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", duration=" + duration +
-                ", dependencyList=" + dependencyList +
-                '}';
-    }
 }

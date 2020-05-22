@@ -12,7 +12,8 @@ import java.util.Arrays;
  *              Thaweesak Saiwongse (Note)   60070503429
  *              16/04/2020
  * */
-public class ProjectManager {
+public class ProjectManager
+{
     /** Instance of project manager*/
     private static ProjectManager projectManager_instance = null;
     /** List of projects */
@@ -20,7 +21,11 @@ public class ProjectManager {
     /** textFileIO Instance*/
     TextFileIO textFileIO = new TextFileIO();
 
-    private ProjectManager(){
+    /**
+     * Constructor
+     */
+    private ProjectManager()
+    {
 
     }
     /**

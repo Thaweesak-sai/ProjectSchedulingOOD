@@ -8,7 +8,8 @@ import java.time.LocalDate;
  *              Thaweesak Saiwongse (Note)   60070503429
  *              14/04/2020
  * */
-public class Project {
+public class Project
+{
     /** task manager of the project */
     private TaskManager taskManager;
     /** starting date of the project */

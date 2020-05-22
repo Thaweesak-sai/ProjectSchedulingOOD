@@ -29,7 +29,8 @@ public class GanttChart {
      * GanttChart
      * A constructor to create GanttChart
      * */
-    public GanttChart(Project project){
+    public GanttChart(Project project)
+    {
         this.project = project;
         this.projectEndDate=project.getEndDate();
         this.projectStartDate=project.getStartDate();
@@ -39,7 +40,8 @@ public class GanttChart {
      * getGanttChart
      * A method to display gantt chart of the project through JFrame & JTable
      * */
-    public void getGanttChart() {
+    public void getGanttChart()
+    {
          frame = new JFrame();
          frame.setTitle("Project : "+project.getName() +" Gantt Chart");
         TaskManager taskManager = project.getTaskManager();

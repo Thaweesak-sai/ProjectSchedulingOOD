@@ -12,6 +12,13 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Scanner;
 
+/**
+ * A class to run the application
+ *
+ *   Created by Jednipit Tantaletong (Pleum) 60070503411
+ *              Thaweesak Saiwongse (Note) 60070503429
+ *              22/04/2020
+ */
 public class ProjectSchedulingApplication {
     /** Scanner to receive input from user*/
     private static Scanner scanner = new Scanner(System.in);
@@ -19,13 +26,17 @@ public class ProjectSchedulingApplication {
     private static TaskManager selectedTaskManager;
     /** Project manager instance */
     private static ProjectManager projectManager = ProjectManager.getInstance();
-    /** current porject that user selected*/
+    /** current project that user selected*/
     private static Project selectedProject;
     /** current task that user selected */
     private static Task selectedTask;
 
 
-
+    /**
+     * Check that string input that user enter valid or not
+     * @param label Label for the input
+     * @return string that user input
+     */
     private static String getStringInput(String label)
     {
         String input;
@@ -45,6 +56,11 @@ public class ProjectSchedulingApplication {
         return input;
     }
 
+    /**
+     * Check that integer input that user enter valid or not
+     * @param label label for the input
+     * @return integer that user input
+     */
     private static int getIntegerInput(String label)
     {
         int input;
@@ -65,6 +81,12 @@ public class ProjectSchedulingApplication {
         return input;
     }
 
+    /**
+     * Check that string input that user enter for date is valid or not
+     * also convert string to date
+     * @param label label for the input
+     * @return date that user input
+     */
     private static LocalDate getDateInput(String label)
     {
         LocalDate date;
@@ -93,13 +115,21 @@ public class ProjectSchedulingApplication {
     }
 
 
+    /**
+     * Find the task in project from the task name that user input
+     * @param label label for the input
+     * @return task that user want to select
+     */
     private static Task findTask(String label)
     {
         String inputTask = getStringInput(label);
         return selectedTaskManager.getTask(inputTask);
     }
 
-
+    /**
+     * Ask for user input for new task in the project
+     * @return task if it is successfully added to the project otherwise null
+     */
     private static Task addNewTask()
     {
         String taskName = getStringInput("Task Name: ");
@@ -117,7 +147,10 @@ public class ProjectSchedulingApplication {
         }
     }
 
-
+    /**
+     * Ask for project information to create new project
+     * @return project that is successfully created
+     */
     private static Project createNewProject()
     {
 
@@ -129,6 +162,12 @@ public class ProjectSchedulingApplication {
         return newProject;
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
     private static boolean loadProject() throws IOException, ParseException
     {
         projectManager.printAllProject();
@@ -141,9 +180,12 @@ public class ProjectSchedulingApplication {
         selectedTaskManager.showAllTaskInformation();
         projectPage();
         return true;
-    } 
+    }
 
 
+    /**
+     * Menu that user can select to do with the project
+     */
     private static void projectPage()
     {
         System.out.println("\n=========================================");
@@ -210,6 +252,7 @@ public class ProjectSchedulingApplication {
                     {
                         selectedTaskManager.deleteTask(selectedTask);
                         Schedule.assignDate(selectedProject);
+                        System.out.println("Successfully delete the task");
                     }
                     else
                     {
@@ -268,7 +311,8 @@ public class ProjectSchedulingApplication {
                 projectPage();
                 break;
             case 6:
-                if(!selectedTaskManager.isTaskListEmpty()){
+                if(!selectedTaskManager.isTaskListEmpty())
+                {
                     selectedTaskManager.showAllTaskInformation();
                     Task removePreDecessorTask = findTask("Predecessor Task: ");
                     if(removePreDecessorTask != null)
@@ -370,6 +414,10 @@ public class ProjectSchedulingApplication {
                 break;
         }
     }
+
+    /**
+     * Menu for edit project information
+     */
     private static void editProjectPage()
     {
         System.out.println("=========================================");
@@ -377,32 +425,38 @@ public class ProjectSchedulingApplication {
         System.out.println("=========================================");
         selectedProject.showProjectInformation();
         int choice;
-        do{
-        System.out.println("Select which fields to edit: ");
-        System.out.println("1. Project name");
-        System.out.println("2. Project description");
-        System.out.println("3. Project start date");
-        System.out.println("4. Exit to Project Page");
-        choice = getIntegerInput("Enter: ");
-        switch (choice)
+        do
         {
-            case 1:
-                String newName = getStringInput("New Name: ");
-                selectedProject.setName(newName);
-                break;
-            case 2:
-                String newDescription = getStringInput("New Description: ");
-                selectedProject.setDesc(newDescription);
-                break;
-            case 3:
-                LocalDate newStartDate = getDateInput("New Start Date: ");
-                selectedProject.setStartDate(newStartDate);
-                Schedule.assignDate(selectedProject);
-                break;
-        } }while (choice !=4);
+            System.out.println("Select which fields to edit: ");
+            System.out.println("1. Project name");
+            System.out.println("2. Project description");
+            System.out.println("3. Project start date");
+            System.out.println("4. Exit to Project Page");
+            choice = getIntegerInput("Enter: ");
+            switch (choice)
+            {
+                case 1:
+                    String newName = getStringInput("New Name: ");
+                    selectedProject.setName(newName);
+                    break;
+                case 2:
+                    String newDescription = getStringInput("New Description: ");
+                    selectedProject.setDesc(newDescription);
+                    break;
+                case 3:
+                    LocalDate newStartDate = getDateInput("New Start Date: ");
+                    selectedProject.setStartDate(newStartDate);
+                    Schedule.assignDate(selectedProject);
+                    break;
+            }
+        }
+        while (choice !=4);
         projectPage();
     }
 
+    /**
+     * Menu for edit task information
+     */
     private static void editTaskPage(){
         System.out.println("=========================================");
         System.out.println("\tEdit Task Page ");
@@ -413,7 +467,8 @@ public class ProjectSchedulingApplication {
         System.out.println("3. Task Duration");
         System.out.println("4. Exit to Project Page");
         int choice;
-        do{
+        do
+        {
             choice = getIntegerInput("Enter: ");
             switch (choice)
             {
@@ -441,7 +496,8 @@ public class ProjectSchedulingApplication {
                     projectPage();
                     break;
             }
-        }while(choice!=4);
+        }
+        while(choice!=4);
         projectPage();
     }
 
@@ -451,36 +507,41 @@ public class ProjectSchedulingApplication {
         System.out.println("Welcome to Project Scheduling Application");
         System.out.println("=========================================");
         int choice;
-        do{
-                System.out.println("1. Create New Project");
-                System.out.println("2. Load Project");
-                System.out.println("3. Exit Program");
-                choice = getIntegerInput("Enter: ");
-                switch (choice) {
-                    case 1:
-                        System.out.println("\n=========================================");
-                        System.out.println("\t\t\tCreate New Project");
-                        System.out.println("=========================================");
-                        selectedProject = createNewProject();
-                        selectedTaskManager = selectedProject.getTaskManager();
-                        projectPage();
-                        break;
-                    case 2:
-                        System.out.println("\n=========================================");
-                        System.out.println("\t\t\tLoad Project");
-                        System.out.println("=========================================");
-                        try {
-                            loadProject();
-                        } catch (IOException e) {
-                            System.out.println("Error: Can't load the project file");
-                        }
-                        break;
-                    case 3:
-                        System.out.println("Exiting Program...");
-                        break;
-                    default:
-                        System.out.println("Invalid menu choice. Please try again...");
-                }
-        }while(choice!=3);
+        do
+        {
+            System.out.println("1. Create New Project");
+            System.out.println("2. Load Project");
+            System.out.println("3. Exit Program");
+            choice = getIntegerInput("Enter: ");
+            switch (choice) {
+                case 1:
+                    System.out.println("\n=========================================");
+                    System.out.println("\t\t\tCreate New Project");
+                    System.out.println("=========================================");
+                    selectedProject = createNewProject();
+                    selectedTaskManager = selectedProject.getTaskManager();
+                    projectPage();
+                    break;
+                case 2:
+                    System.out.println("\n=========================================");
+                    System.out.println("\t\t\tLoad Project");
+                    System.out.println("=========================================");
+                    try
+                    {
+                        loadProject();
+                    }
+                    catch (IOException e)
+                    {
+                        System.out.println("Error: Can't load the project file");
+                    }
+                    break;
+                case 3:
+                    System.out.println("Exiting Program...");
+                    break;
+                default:
+                    System.out.println("Invalid menu choice. Please try again...");
+            }
+        }
+        while(choice!=3);
     }
 }
