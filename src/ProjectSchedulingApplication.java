@@ -3,6 +3,7 @@ import java.text.ParseException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -151,9 +152,7 @@ public class ProjectSchedulingApplication
         String projectName = getStringInput("Project Name: ");
         String projectDesc = getStringInput("Project description: ");
         LocalDate date = getDateInput("Start date (DD-MM-YYYY): ");
-        Project newProject = new Project(projectName,projectDesc,date);
-        projectManager.addProject(newProject);
-        return newProject;
+        return projectManager.createProject(projectName,projectDesc,date);
     }
 
     private static void loadProject() throws ParseException
@@ -164,7 +163,7 @@ public class ProjectSchedulingApplication
         do {
             projectName = getStringInput("Project name to load (Exclude .txt):  ");
             for (int i = 0; i < allFilesName.length; i++) {
-                if (allFilesName[i].equals(projectName)) {
+                if (allFilesName[i].equals(projectName+".txt")) {
                     fileFounded = true;
                     break;
                 }

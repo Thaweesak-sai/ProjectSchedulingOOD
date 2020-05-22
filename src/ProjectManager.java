@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -39,6 +40,12 @@ public class ProjectManager
         return projectManager_instance;
     }
 
+    public Project createProject(String projectName, String projectDescription, LocalDate startDate )
+    {
+        Project project = new Project(projectName,projectDescription,startDate);
+        addProject(project);
+        return project;
+    }
     /**
      * addProject
      * A method to add project to list
