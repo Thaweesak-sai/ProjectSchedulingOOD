@@ -108,8 +108,15 @@ public class ProjectManager
      * save
      * A method to save a project to call textfileIO to save to text file
      * */
-    public void save(Project project) throws IOException
+    public boolean save(Project project)
     {
-        textFileIO.writeProjectFile(project);
+        boolean bOK = true;
+        try{
+            textFileIO.writeProjectFile(project);
+        }catch (IOException e)
+        {
+            bOK=false;
+        }
+        return  bOK;
     }
 }
