@@ -130,9 +130,9 @@ public class ProjectSchedulingApplication
         String taskName = getStringInput("Task Name: ");
         String taskDescription = getStringInput("Description: ");
         int duration = getIntegerInput("Duration: " );
-        Task task = new Task(taskName,taskDescription,duration);
         if(selectedTaskManager.checkTaskName(taskName))
         {
+            Task task = new Task(taskName,taskDescription,duration);
             selectedTaskManager.addTask(task);
             return task;
         }
