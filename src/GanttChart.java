@@ -22,9 +22,9 @@ public class GanttChart
     /** project starting date*/
     private LocalDate projectStartDate;
     /** JFrame for gantt chart*/
-    JFrame frame;
+    private JFrame frame;
     /** JTable for gantt chart*/
-    JTable table;
+    private JTable table;
 
     /**
      * GanttChart
