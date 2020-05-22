@@ -29,6 +29,7 @@ public class GanttChart
     /**
      * GanttChart
      * A constructor to create GanttChart
+     * @param project project to build gantt chart
      * */
     public GanttChart(Project project)
     {
@@ -39,7 +40,7 @@ public class GanttChart
 
     /**
      * getGanttChart
-     * A method to display gantt chart of the project through JFrame & JTable
+     * A method to display gantt chart of the project through JFrame and JTable
      * */
     public void getGanttChart()
     {

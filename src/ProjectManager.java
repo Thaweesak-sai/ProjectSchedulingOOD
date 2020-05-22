@@ -74,6 +74,7 @@ public class ProjectManager
     /**
      * printAllProject
      * A method to print all project name in the directory
+     * @return splitedString, array string contains all file name
      * */
     public String[] getAllProjectName()
     {
@@ -110,6 +111,9 @@ public class ProjectManager
     /**
      * save
      * A method to save a project to call textfileIO to save to text file
+     * @param project project to save
+     * @return  true if succeed
+     *          false if fails
      * */
     public boolean save(Project project)
     {

@@ -90,43 +90,45 @@ public class TextFileIO
      * A method to store project's data as a text file.
      * @param project ,the project the user selected to save as a text file.
      *
-     *
      * */
-    public void writeProjectFile(Project project) throws IOException
+    public void writeProjectFile(Project project) 
     {
-        PrintWriter writer = new PrintWriter(new FileOutputStream(project.getName() + ".txt", Boolean.parseBoolean(String.valueOf(StandardCharsets.UTF_8))),false);
-        writer.println("project|" + project.getName());
-        writer.println("project|" + project.getDesc());
-        writer.println("project|" + DateFormatter.formatDateToStringForSaving(project.getStartDate()));
-        if(project.getEndDate()!=null)
-        {
-            writer.println("project|" + DateFormatter.formatDateToStringForSaving(project.getEndDate()));
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(new FileOutputStream(project.getName() + ".txt", Boolean.parseBoolean(String.valueOf(StandardCharsets.UTF_8))),false);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        int numberOfTask = project.getTaskManager().getAllTask().size();
-        List<Task> taskList = project.getTaskManager().getAllTask();
-        for( int i=0;i < numberOfTask; i++)
+        if(writer!=null)
         {
-            List<Dependency> taskDependency = taskList.get(i).getDependencyList();
-            writer.println("task|" + taskList.get(i).getTaskName());
-            writer.println("task|" + taskList.get(i).getTaskDescription());
-            writer.println("task|" + taskList.get(i).getDuration());
-            if(taskList.get(i).getStartDate()!=null)
-            {
-                writer.println("task|" + DateFormatter.formatDateToStringForSaving(taskList.get(i).getStartDate()));
+            writer.println("project|" + project.getName());
+            writer.println("project|" + project.getDesc());
+            writer.println("project|" + DateFormatter.formatDateToStringForSaving(project.getStartDate()));
+            if (project.getEndDate() != null) {
+                writer.println("project|" + DateFormatter.formatDateToStringForSaving(project.getEndDate()));
             }
-            if(taskList.get(i).getEndDate()!=null)
-            {
-                writer.println("task|" + DateFormatter.formatDateToStringForSaving(taskList.get(i).getEndDate()));
+            int numberOfTask = project.getTaskManager().getAllTask().size();
+            List<Task> taskList = project.getTaskManager().getAllTask();
+            for (int i = 0; i < numberOfTask; i++) {
+                List<Dependency> taskDependency = taskList.get(i).getDependencyList();
+                writer.println("task|" + taskList.get(i).getTaskName());
+                writer.println("task|" + taskList.get(i).getTaskDescription());
+                writer.println("task|" + taskList.get(i).getDuration());
+                if (taskList.get(i).getStartDate() != null) {
+                    writer.println("task|" + DateFormatter.formatDateToStringForSaving(taskList.get(i).getStartDate()));
+                }
+                if (taskList.get(i).getEndDate() != null) {
+                    writer.println("task|" + DateFormatter.formatDateToStringForSaving(taskList.get(i).getEndDate()));
+                }
+                writer.println("ENDTASK| ");
+                for (int j = 0; j < taskDependency.size(); j++) {
+                    writer.println("dependency|" + taskDependency.get(j).getPreDecessorTask().getTaskName());
+                    writer.println("dependency|" + taskDependency.get(j).getSuccessorTask().getTaskName());
+                    writer.println("ENDDEPENDENCY| ");
+                }
             }
-            writer.println("ENDTASK| ");
-            for (int j = 0; j < taskDependency.size(); j++)
-            {
-                writer.println("dependency|" + taskDependency.get(j).getPreDecessorTask().getTaskName());
-                writer.println("dependency|" + taskDependency.get(j).getSuccessorTask().getTaskName());
-                writer.println("ENDDEPENDENCY| ");
-            }
+            writer.close();
         }
-        writer.close();
     }
 
     /**
@@ -219,20 +221,23 @@ public class TextFileIO
         System.out.println("Searching all files in " + currentPath + " ....");
         File folder = new File(String.valueOf(currentPath));
         File[] projectFileList = folder.listFiles((file, name) -> name.endsWith(".txt"));
-        String allFileName;
+        String allFileName = null;
         /* no text file in the directory*/
-        if(projectFileList.length==0)
+        if (projectFileList != null)
         {
-            return null;
-        }
-        else
-        {
-            allFileName = projectFileList[0].getName();
-            allFileName = allFileName.concat("|");
-            for (int i =1;i<projectFileList.length;i++)
+            if(projectFileList.length==0)
             {
-                allFileName = allFileName.concat(projectFileList[i].getName());
+                return null;
+            }
+            else
+            {
+                allFileName = projectFileList[0].getName();
                 allFileName = allFileName.concat("|");
+                for (int i =1;i<projectFileList.length;i++)
+                {
+                    allFileName = allFileName.concat(projectFileList[i].getName());
+                    allFileName = allFileName.concat("|");
+                }
             }
         }
         return allFileName;
