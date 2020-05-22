@@ -220,7 +220,8 @@ public class TextFileIO
         File folder = new File(String.valueOf(currentPath));
         File[] projectFileList = folder.listFiles((file, name) -> name.endsWith(".txt"));
         String allFileName;
-        if(projectFileList==null)
+        /* no text file in the directory*/
+        if(projectFileList.length==0)
         {
             return null;
         }
