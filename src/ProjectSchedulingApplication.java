@@ -159,7 +159,7 @@ public class ProjectSchedulingApplication
      * loadProject
      * Ask for project to load, and check for its input
      * */
-    private static void loadProject() throws ParseException
+    private static void loadProject() 
     {
         String[] allFilesName = projectManager.getAllProjectName();
         if(allFilesName==null)
