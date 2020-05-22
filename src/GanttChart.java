@@ -13,7 +13,8 @@ import javax.swing.*;
  *             Thaweesak Saiwongse 60070503429 (Note)
  *             20/05/2020
  * */
-public class GanttChart {
+public class GanttChart
+{
     /** project instance*/
     private Project project;
     /** project end date*/

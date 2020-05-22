@@ -11,7 +11,8 @@ import java.util.List;
  *              Thaweesak Saiwongse (Note) 60070503429
  *              29/04/2020
  */
-public class Schedule {
+public class Schedule
+{
 
     /**
      * Assign the start and end date to all tasks of the projects according to the dependencies

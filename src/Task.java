@@ -8,7 +8,8 @@ import java.util.ArrayList;
  *              Thaweesak Saiwongse (Note) 60070503429
  *              22/04/2020
  */
-public class Task {
+public class Task
+{
     /** task name */
     private String taskName;
     /** task description */

@@ -132,7 +132,8 @@ public class Project
      * A method to show only on the project information
      * such as  name, description, start date and end date
      * */
-    public void showProjectInformation(){
+    public void showProjectInformation()
+    {
         System.out.println("Project name: "+projectName);
         System.out.println("Project description: "+projectDesc);
         System.out.println("Start date: "+ DateFormatter.formatDateToStringForDisplay(startDate));
@@ -149,7 +150,8 @@ public class Project
      * getGanttChart()
      * A method to get the gantt chart for the project
      * */
-    public void getGanttChart(){
+    public void getGanttChart()
+    {
         GanttChart ganttChart = new GanttChart(this);
         ganttChart.getGanttChart();
     }

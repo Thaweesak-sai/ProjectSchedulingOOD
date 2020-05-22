@@ -29,7 +29,7 @@ public class TextFileIO
      *  A method to open the project file to read/write
      * @param fileName is project's file name
      * */
-    public void openProjectFile(String fileName){
+    private void openProjectFile(String fileName){
         try
         {
             if (reader != null)
@@ -54,8 +54,7 @@ public class TextFileIO
      * @return lineRead, return line as a string, next line is nothing or error occurred.
      * Created By Sally Goldin, 21 March 2012, modified by Thaweesak Saiwongse 16/05/2020
      * */
-    public String getNextLine()
-    {
+    private String getNextLine(){
         String lineRead = null;
         try
         {
@@ -80,8 +79,7 @@ public class TextFileIO
      * A method to close the opened file.
      *
      */
-    public void close()
-    {
+    private void close(){
         try
         {
             reader.close();
@@ -213,35 +211,8 @@ public class TextFileIO
         close();
         return loadedProject;
     }
-    /**
-     * deleteProjectFile
-     * A method to delect project file
-     * @param project, the project wanted to delete
-     * @return true, if succeed
-     *       false, if fail
-     * */
-    public boolean deleteProjectFile(Project project)
-    {
-        close();
-        Path currentPath = FileSystems.getDefault().getPath("").toAbsolutePath();
-        System.out.println(currentPath);
-        File here = new File(".");
-        System.out.println(here.getAbsolutePath());
-        try
-        {
-            File file = new File(here.getAbsolutePath()+project.getName()+".txt");
-//            File file = new File(currentPath+project.getName()+".txt");
-            file.delete();
-            System.out.println("Succesfully delete");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            System.out.println("ERROR CAn't delete");
-            return false;
-        }
-        return true;
-    }
+
+
     /**
      * getAllFileName
      * A method to read all text file name in the directory
