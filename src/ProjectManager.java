@@ -65,7 +65,7 @@ public class ProjectManager
      * A method to load project from text file and add to project list
      * @param projectName project name
      * */
-    public void loadProject(String projectName) throws ParseException
+    public void loadProject(String projectName)
     {
         Project loadedProject = textFileIO.readProjectFile(projectName);
         addProject(loadedProject);

@@ -1,13 +1,8 @@
 import java.io.*;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -93,7 +88,7 @@ public class TextFileIO
     /**
      * writeProjectFile
      * A method to store project's data as a text file.
-     * @param project, the project the user selected to save as a text file.
+     * @param project ,the project the user selected to save as a text file.
      *
      *
      * */
@@ -137,7 +132,7 @@ public class TextFileIO
     /**
      *  readProjectFile
      *  A method to read text file and create all project objects.
-     * @param fileName, a file that want to load/read
+     * @param fileName ,a file that want to load/read
      * @return Project, project instance.
      * */
     public Project readProjectFile(String fileName)
@@ -148,7 +143,7 @@ public class TextFileIO
         int taskCount=0;
         int dependencyCount=0;
         openProjectFile(fileName);
-        String currentLine = null;
+        String currentLine ;
         while((currentLine = getNextLine())!=null)
         {
             String[] line = currentLine.split("\\|");
