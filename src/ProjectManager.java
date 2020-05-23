@@ -118,12 +118,7 @@ public class ProjectManager
     public boolean save(Project project)
     {
         boolean bOK = true;
-        try{
-            textFileIO.writeProjectFile(project);
-        }catch (IOException e)
-        {
-            bOK=false;
-        }
+        textFileIO.writeProjectFile(project);
         return  bOK;
     }
 }

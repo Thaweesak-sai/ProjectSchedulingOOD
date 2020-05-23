@@ -207,7 +207,7 @@ public class ProjectSchedulingApplication
     private static void projectPage()
     {
         System.out.println("\n=========================================");
-        System.out.println("\t\t\tProject: "+ selectedProject.getName());
+        System.out.println("\t\tProject: "+ selectedProject.getName());
         System.out.println("=========================================");
         System.out.println("1. Edit Project Information");
         System.out.println("2. Add New Task");
@@ -505,7 +505,7 @@ public class ProjectSchedulingApplication
                 switch (choice) {
                     case 1:
                         System.out.println("\n=========================================");
-                        System.out.println("\t\t\tCreate New Project");
+                        System.out.println("\t\tCreate New Project");
                         System.out.println("=========================================");
                         selectedProject = createNewProject();
                         selectedTaskManager = selectedProject.getTaskManager();
@@ -513,7 +513,7 @@ public class ProjectSchedulingApplication
                         break;
                     case 2:
                         System.out.println("\n=========================================");
-                        System.out.println("\t\t\tLoad Project");
+                        System.out.println("\t\tLoad Project");
                         System.out.println("=========================================");
                         loadProject();
                         break;
